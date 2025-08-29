@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application-k8s-config
+  namespace: default
+data:
+  spring-profile: k8s
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: feeder
+  namespace: default
+  labels:
+    app: feeder
+spec:
+  template:
+    metadata:
+      labels:
+        app: feeder
+    spec:
+      containers:
+        - name: feeder
+          image: my-app
+          env:
+            # Define the environment variable
+            - name: spring_profiles_active
+              valueFrom:
+                configMapKeyRef:
+                  # The ConfigMap containing the value you want to assign to spring_profiles_active
+                  name: application-k8s-config
+                  # Specify the key associated with the value
+                  key: spring-profile
+      restartPolicy: Never
+  backoffLimit: 2

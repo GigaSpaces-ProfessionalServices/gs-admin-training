@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:os-core="http://www.openspaces.org/schema/core"
+       xmlns:os-events="http://www.openspaces.org/schema/events"
+       xmlns:os-remoting="http://www.openspaces.org/schema/remoting"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.openspaces.org/schema/core http://www.openspaces.org/schema/core/openspaces-core.xsd
+       http://www.openspaces.org/schema/events http://www.openspaces.org/schema/events/openspaces-events.xsd
+       http://www.openspaces.org/schema/remoting http://www.openspaces.org/schema/remoting/openspaces-remoting.xsd">
+
+    <!--
+        Spring propery configurer which allows us to use system properties (such as user.name).
+    -->
+    <bean id="propertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
+
+    <context:annotation-config />
+
+    <!--
+        Scan for components (both Spring ones and OpenSpaces ones)
+    -->
+    <context:component-scan base-package="com.gigaspaces.dev.training"/>
+
+    <!--
+        Enables the usage of @GigaSpaceContext annotation based injection.
+    -->
+    <os-core:giga-space-context/>
+    
+    <!--
+        Enables using @Polling and @Notify annotations
+    -->
+    <os-events:annotation-support />
+
+    <!--
+        Enables using @RemotingService as well as @SyncProxy (and others) annotations
+    -->
+    <os-remoting:annotation-support />
+
+    <!--
+        A bean representing a space (an IJSpace implementation).
+
+        Note, we do not specify here the cluster topology of the space. It is declated outside of
+        the processing unit or within the SLA bean.
+    -->
+    <os-core:embedded-space id="space" space-name="demo" />
+
+    <!--
+        Defines a distributed transaction manager.
+    -->
+    <os-core:distributed-tx-manager id="transactionManager"/>
+
+    <!--
+        OpenSpaces simplified space API built on top of IJSpace/JavaSpace.
+    -->
+    <os-core:giga-space id="gigaSpace" space="space" tx-manager="transactionManager"/>
+
+    <!--
+        A context loader loading a Spring application context defined by the location only when
+        this processing unit instance is primary (in a primary backup scenario).
+    -->
+    <os-core:refreshable-context-loader id="modeExample" location="classpath:/META-INF/spring/mode/mode.xml"/>
+
+    <os-remoting:service-exporter id="serviceExporter">
+        <os-remoting:service ref="modeExample"/>
+    </os-remoting:service-exporter>
+
+</beans>
