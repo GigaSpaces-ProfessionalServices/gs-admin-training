@@ -14,6 +14,6 @@ mvn clean install
 
 cd $SCRIPTS_DIR
 
-./docker-build.sh $@
+./docker-build.sh
 
 cd $CWD

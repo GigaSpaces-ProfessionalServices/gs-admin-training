@@ -4,7 +4,7 @@
 # for service grid
 export GS_LICENSE="tryme"
 
-export GS_HOME="/home/dixson/work/gs/smart/gigaspaces-smart-cache-enterprise-17.1.2"
+export GS_HOME="/home/dixson/gigaspaces-smart-cache-enterprise-17.1.2"
 
 # for k8s
 export DOCKER_USERNAME="dixsonhuie1"
