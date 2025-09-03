@@ -1,100 +1,143 @@
-# lab13-gs_admin_training
+# gs-admin-training - lab13-security
 
-# Grid Security
+# Grid and Data Security
 
-## Lab Goals
-
-1. Experience secured pu deployment process.
-2. Get familiar with GigaSpaces authority and authorization.
-
-## Lab Description
-* In this lab we will focus on secured pu deployment.
-* Authority and Authorization using GS security management.
-* Work with users with different roles.
-
-#### 1	Start gs-agent
-
-1.1 Navigate to the GigaSpaces installation home/bin/
-`cd $GS_HOME/bin`
-
-1.2 Edit setenv-overrides.sh and add:
-
-```
-export GS_MANAGER_OPTIONS="-Dcom.gs.manager.rest.ssl.enabled=false "
-export GS_OPTIONS_EXT="-Dcom.gs.security.enabled=true "
-```
-
-1.3 Start gs-agent with local Manager server and 4 GSCs:
-```
-./gs.sh host run-agent --auto --gsc=4
-```
-
-#### 2	Create GigaSpaces roles & users
-
-1. Create 2 roles:<br>
-1.1 Grid control role which controls all runtime components of the grid (create GSC, deploy pu etc.)but can't perform any operation on the space data.<br>
-2.1 Data control role which can do any data operations in the space (write, read etc.) but can't touch any of the grid runtime components.<br>
-2. Create 2 users:<br>
-2.1 Grid control user - attach the Grid control role to this user.<br>
-2.2 Data control user - attach the Data control role to this user.<br>
-
-For the above please follow:<br>
-https://docs.gigaspaces.com/latest/started/xap-tutorial-part10.html?Highlight=security%20managment#ManagingRoles
-
-#### 3	Deploy BillBuddy_Space
-    
-3.1 Open %GS_ADMIN_TRAINING_HOME%/lab13-gs_admin_training project with Intellij (open pom.xml) <br />
-3.2 Run mvn install <br />
-
-    ~/gs-admin-training/lab13-gs_admin_training$ mvn install
-    
-    
-    [INFO] Reactor Summary:
-    [INFO] 
-    [INFO] lab13 ............................................... SUCCESS [  0.204 s]
-    [INFO] BillBuddyModel ..................................... SUCCESS [  1.087 s]
-    [INFO] BillBuddy_Space .................................... SUCCESS [  0.207 s]
-    [INFO] BillBuddyAccountFeeder ............................. SUCCESS [  0.189 s]
-    [INFO] ------------------------------------------------------------------------
-    [INFO] BUILD SUCCESS
-
-3.3 IntelliJ path Variables (under preferences)
-
-###### Add GS_LOOKUP_GROUPS & GS_LOOKUP_LOCATORS
-
-3.4 Copy the runConfigurations directory to the Intellij .idea directory to enable the Java Application configurations. Restart Intellij.
-```
-cd gs-admin-tranining/lab13-gs_admin_training
-cp -r runConfigurations .idea/
-```
-
-3.5 Open a new Terminal and navigate to the GigaSpaces installation home/bin/
-```
-cd $GS_HOME/bin
-```
-3.6 Use gs CLI to deploy BillBuddy_Space <br>
-* use Grid control user to deploy the pu.
-
-1.  `./gs.sh --username <Grid control user> --password <Grid control password>`
-2.  `pu deploy BillBuddySpace ~/gs-admin-training/lab13-gs_admin_training/BillBuddy_Space/target/BillBuddy_Space.jar` 
-
-#### 4	Run BillBuddyAccountFeeder from Intellij
-
-4.1 From the Intellij select configuration BillBuddyAccountFeeder and run it.
-
-###### This application writes Users, Merchants and Contracts to the Space
+This lab will have tasks related to security, which include:    
+ * Securing the service grid.
+ * Deploying a basic secured space.
+ * Demonstrating a password encoding example.
+ * Experimenting with roles and privileges, including writing to a secured space in a secured grid.
  
-4.2 Validate Users and Merchants were written to the space using the web Management Console (localhost:8099). <br />
- Go to: Spaces Tab -> Data Types. <br />
- 
-![Screenshot](Pictures/Picture1.png)
+---
+### 1. Configuration of secured grid
 
-4.3 Query the list of Users by executing the following SQL: <br />
-Click the Data Type Name and the sql will be created for you: <br />
+1. Navigate to the `$GS_HOME/bin` directory.  
+   `cd $GS_HOME/bin`
 
-    SELECT * FROM com.gs.billbuddy.model.User WHERE rownum<5000
+2. Edit setenv-overrides.sh and add:
+
+```
+export GS_MANAGER_OPTIONS="-Dcom.gs.manager.rest.ssl.enabled=false"
+export GS_OPTIONS_EXT="-Dcom.gs.security.enabled=true"
+```
+Note: Make sure you have set `GS_MANAGER_SERVERS` to localhost also.
+
+### 2. User password encryption
+#### Overview of steps:
+ * Edit the security-config.xml file.
+ * Use org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.
+ * Encrypt and write the passwords for "gs-admin", "gs-mngr" and "gs-viewer". 
+ * Verify that you can login through the Ops Manager.
+
+
+##### Edit the security-config.xml as follows
+1. Edit the default `$GS_HOME/config/security/security-config.xml` and configure the **BCryptPasswordEncoder**:  
+   Replace:
+```
+<bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>
+```
+   with:  
+```
+<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+```
+2. Add bean **DaoAuthenticationProvider**
+```
+    <bean id="authProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <property name="userDetailsService" ref="roleBasedUserService" />
+        <property name="passwordEncoder" ref="passwordEncoder" />
+    </bean>
+ ```
+3. Generating passwords  
+    * Copy the runConfigurations directory to the .idea directory. Restart Intellij.
+    * Open this project in Intellij (pom.xml is located at `$GS_ADMIN_TRAINING/lab13-security/pom.xml`).
+    * Run the PasswordEncoderGenerator to generate the password. Pass the password that you want encoded as a program argument. 
+    * Replace the passwords for gs-admin, gs-mngr, gs-viewer users in the `$GS_HOME/config/security/security-config.xml`.
+4. Review the security-config.xml.  
+    * For reference a copy of the [security-config.xml file](securedgridconfig/example/config/security/security-config.xml) can be found in the current project.
+
+5. Overview of privileges:  
+    * These are the privileges available on the service grid.
+
+      ![Classic Roles and Privileges](Pictures/Picture1.png)
+    * MANAGE_GRID - privileges associated with managing the life cycle of a service grid component.
+    * MONITOR_JVM - allows for monitoring of the JVM and the ability to take heap dumps.
+    * MONITOR_PU, PROVISION_PU, MANAGE_PU - privileges related to managing the life cycle of a PU.
+    * SPACE_READ, SPACE_WRITE, SPACE_ALTER - These privileges allow the user the ability to read and write data.
+    * For more information please consult the [GigaSpaces online documentation](https://docs.gigaspaces.com/latest/security/security-quick-start-understanding-config-file.html).
     
-###### Note: Fully qualified class name is required.
+### 3. Start the grid with a manager
+```
+./gs.sh host run-agent --manager
+```
+### 4. Verify logins
+        
+1. Open the Ops-Manager. The Ops-Manager will be deployed at: `localhost:8090`
 
-![Screenshot](Pictures/Picture2.png)
+2. Verify you can login with:         
+```
+    gs-viewer/gs-viewer
+    gs-mngr/gs-mngr
+    gs-admin/gs-admin
+```
+### 5. Writing to a Secured Space
+#### Overview of steps:
+Writing to a secured PU will be composed of:
+ * Deploying a secured space.
+ * Deploying a stateless PU that writes to the space.
+
+#### Questions
+ * What user will you use?
+ * What privileges should this user have?
+
+#### Solution
+
+##### 1. Edit the security-config.xml file and add the SPACE_WRITE, SPACE_ALTER privilege to user gs-mngr.
+
+##### 2. Restart the grid with a manager
+```
+./gs.sh host run-agent --manager
+```
+
+##### 3. Start 2 Grid Service Containers
+```        
+./gs.sh --username gs-admin --password gs-admin container create --count=2 localhost
+```                      
+##### 4. Deploy the PU with the secured embedded space
+```
+./gs.sh --username gs-admin --password gs-admin pu deploy SecuredSpace $GS_ADMIN_TRAINING/lab13-security/securedspace/target/securedspace.jar
+```
+Note: The space has already been configured to be secured. See the tags below or refer to the [pu.xml file](securedspace/src/main/resources/META-INF/spring/pu.xml)
+```
+    <os-core:embedded-space id="space" space-name="demo">
+        <os-core:security secured="true"/>
+    </os-core:embedded-space>
+```
+
+##### 5. Deploy the feeder PU
+```
+./gs.sh --username gs-admin --password gs-admin pu deploy -p=username=gs-mngr -p=password=gs-mngr Feeder ~/$GS_ADMIN_TRAINING/lab13-security/feeder/target/feeder.jar
+```
+
+##### 6. Query the data executing the following:
+Note: The fully qualified class name is required.
+
+```
+$ ./gs.sh --username gs-mngr --password gs-mngr space query demo com.gigaspaces.dev.training.common.Data 
+
+data    id    processed    rawData    type    
+0       0     false        0          0       
+9       9     false        9          9       
+7       7     false        7          7       
+5       5     false        5          5       
+3       3     false        3          3       
+1       1     false        1          1       
+8       8     false        8          8       
+6       6     false        6          6       
+4       4     false        4          4       
+2       2     false        2          2       
+
+
+SUMMARY     
+Results:    10
+```
 
