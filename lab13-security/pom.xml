@@ -1,10 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.gigaspaces.dev.training</groupId>
-    <artifactId>lab13</artifactId>
+    <artifactId>lab13-security</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>lab13</name>
+    <name>lab13-security</name>
     <packaging>pom</packaging>
     <repositories>
         <repository>
@@ -13,46 +15,25 @@
         </repository>
     </repositories>
     <properties>
-        <gigaspaces.version>17.1.0</gigaspaces.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <jakarta.persistence.version>3.1.0</jakarta.persistence.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <gigaspaces.version>17.1.2</gigaspaces.version>
+        <spring.security.version>6.4.2</spring.security.version>
     </properties>
     <modules>
-        <module>BillBuddyModel</module>
-        <module>BillBuddy_Space</module>
-        <module>BillBuddyAccountFeeder</module>
+        <module>securedgridconfig</module>
+        <module>securedspace</module>
+        <module>common</module>
+        <module>feeder</module>
     </modules>
     <dependencies>
-<!--
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-            <version>${spring.version}</version>
-            <scope>provided</scope>
-        </dependency>
-  -->
         <dependency>
             <groupId>org.gigaspaces</groupId>
             <artifactId>xap-openspaces</artifactId>
             <version>${gigaspaces.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.1</version>
-            <scope>test</scope>
-        </dependency>
-<!--
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
-        </dependency>
-  -->
     </dependencies>
     <build>
         <defaultGoal>package</defaultGoal>

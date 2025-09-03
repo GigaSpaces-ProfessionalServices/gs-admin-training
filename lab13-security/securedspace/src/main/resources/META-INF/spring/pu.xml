@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    top level element of the Spring configuration. Note the multiple namespace definition for both GigaSpaces and Spring.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:os-core="http://www.openspaces.org/schema/core"
+       xmlns:os-events="http://www.openspaces.org/schema/events"
+       xmlns:os-remoting="http://www.openspaces.org/schema/remoting"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.openspaces.org/schema/core http://www.openspaces.org/schema/core/openspaces-core.xsd
+    http://www.openspaces.org/schema/events http://www.openspaces.org/schema/events/openspaces-events.xsd
+    http://www.openspaces.org/schema/remoting http://www.openspaces.org/schema/remoting/openspaces-remoting.xsd">
+
+    <!-- Enables to configure Spring beans through annotations   -->
+    <context:annotation-config />
+
+    <!-- Enable OpenSpaces core annotation support. -->
+    <os-core:annotation-support />
+
+    <!-- Enables using @Polling and @Notify annotations to creating polling and notify containers  -->
+    <os-events:annotation-support />
+
+    <!-- Enables using @RemotingService and other remoting related annotations   -->
+    <os-remoting:annotation-support />
+
+
+    <os-core:embedded-space id="space" space-name="demo">
+        <os-core:security secured="true"/>
+    </os-core:embedded-space>
+
+</beans>
