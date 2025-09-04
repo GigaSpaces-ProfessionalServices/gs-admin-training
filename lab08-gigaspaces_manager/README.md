@@ -50,9 +50,10 @@ To login to the machines goto the Vagrant directory and run:<br>
 
 ### 4 Explore Apache ZooKeeper under the hood (optional section if time permits)
 
- * `git clone https://github.com/DeemOpen/zkui.git`
- * Follow the **Setup** instructions as appear in the readme:  
-   https://github.com/DeemOpen/zkui/blob/master/README.md
+ * Open `$GS_TRAINING_HOME/lab08-gigaspaces_manager/zk-client-example` project with Intellij (open pom.xml).
+ * Copy the [runConfigurations](zk-client-example/runConfigurations) directory to .idea folder. Restart Intellij.
+ * The project has a simple Java program that can traverse the Zookeeper nodes and print its data.
+ * Run the zk-client-example run configuration from Intellij.
  * Explore GS ZK tree to better understand GigaSpaces and the information stored in ZK.
 
 ### 5 Note:
