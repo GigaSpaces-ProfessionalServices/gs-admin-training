@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="zk-client-example" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.gigaspaces.dev.training.Main" />
+    <module name="zk-client-example" />
+    <option name="PROGRAM_PARAMETERS" value="10.211.55.102:2181" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
