@@ -144,4 +144,4 @@ Results:    10
 ```
 ---
 ### Additional Resources
-An example of configuring GigaSpaces for use with ldap is available in our knowledge base at our [support portal](https://support2.gigaspaces.com). Sign up is required.
+An example of securing GigaSpaces with ldap is available in our knowledge base at our [support portal](https://support2.gigaspaces.com). Sign up is required.
