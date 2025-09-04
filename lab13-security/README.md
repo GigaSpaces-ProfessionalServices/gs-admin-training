@@ -63,7 +63,8 @@ Note: Make sure you have set `GS_MANAGER_SERVERS` to localhost also.
     * MONITOR_JVM - allows for monitoring of the JVM and the ability to take heap dumps.
     * MONITOR_PU, PROVISION_PU, MANAGE_PU - privileges related to managing the life cycle of a PU.
     * SPACE_READ, SPACE_WRITE, SPACE_ALTER - These privileges allow the user the ability to read and write data.
-    * For more information please consult the [GigaSpaces online documentation](https://docs.gigaspaces.com/latest/security/security-quick-start-understanding-config-file.html).
+    * For more information on Space Privileges please consult the [GigaSpaces online documentation](https://docs.gigaspaces.com/latest/security/security-quick-start-understanding-config-file.html).
+    * For more information on configuring the security-config.xml, please see our guide [here](https://docs.gigaspaces.com/latest/security/security-quick-start-understanding-config-file.html).
     
 ### 3. Start the grid with a manager
 ```
@@ -91,18 +92,18 @@ Writing to a secured PU will be composed of:
 
 #### Solution
 
-##### 1. Edit the security-config.xml file and add the SPACE_WRITE, SPACE_ALTER privilege to user gs-mngr.
+1. Edit the security-config.xml file and add the SPACE_WRITE, SPACE_ALTER privilege to user gs-mngr.
 
-##### 2. Restart the grid with a manager
+2. Restart the grid with a manager
 ```
 ./gs.sh host run-agent --manager
 ```
 
-##### 3. Start 2 Grid Service Containers
+3. Start 2 Grid Service Containers
 ```        
 ./gs.sh --username gs-admin --password gs-admin container create --count=2 localhost
 ```                      
-##### 4. Deploy the PU with the secured embedded space
+4. Deploy the PU with the secured embedded space
 ```
 ./gs.sh --username gs-admin --password gs-admin pu deploy SecuredSpace $GS_ADMIN_TRAINING/lab13-security/securedspace/target/securedspace.jar
 ```
@@ -112,13 +113,14 @@ Note: The space has already been configured to be secured. See the tags below or
         <os-core:security secured="true"/>
     </os-core:embedded-space>
 ```
+For more information on secured spaces please visit the [GigaSpaces online documentation](https://docs.gigaspaces.com/latest/security/securing-your-data.html)
 
-##### 5. Deploy the feeder PU
+5. Deploy the feeder PU
 ```
 ./gs.sh --username gs-admin --password gs-admin pu deploy -p=username=gs-mngr -p=password=gs-mngr Feeder ~/$GS_ADMIN_TRAINING/lab13-security/feeder/target/feeder.jar
 ```
 
-##### 6. Query the data executing the following:
+6. Query the data executing the following:
 Note: The fully qualified class name is required.
 
 ```
@@ -140,4 +142,6 @@ data    id    processed    rawData    type
 SUMMARY     
 Results:    10
 ```
-
+---
+### Additional Resources
+An example of configuring GigaSpaces for use with ldap is available in our knowledge base at our [support portal](https://support2.gigaspaces.com). Sign up is required.
