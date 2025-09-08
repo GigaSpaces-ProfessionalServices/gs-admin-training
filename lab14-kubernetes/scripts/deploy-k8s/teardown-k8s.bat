@@ -1,9 +1,9 @@
 
-DEPLOY_DIR="%~dp0"
+set DEPLOY_DIR="%~dp0"
 
-CWD=%cd%
+set CWD=%cd%
 
-cd %DEPLOY_DIR\yaml
+cd %DEPLOY_DIR%\yaml
 
 kubectl delete -f job.yaml
 kubectl delete -f manager-np.yaml

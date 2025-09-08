@@ -14,5 +14,4 @@ helm delete processor
 helm delete operator
 helm delete manager
 
-
 cd $CWD
