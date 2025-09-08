@@ -1,4 +1,4 @@
-# gs-admin-training - lab10-hot_deploy
+# gs-admin-training - lab09-hot_deploy
 
 # Hot Deploy Procedure
 
@@ -69,10 +69,10 @@ The steps are the same as you have done in lab05.
     
 #### 2	Deploy BillBuddy_Space.jar
     
-1. Open `$GS_TRAINING_HOME/lab10-hot_deploy` project with Intellij (open pom.xml).
+1. Open `$GS_TRAINING_HOME/lab09-hot_deploy` project with Intellij (open pom.xml).
 2. Run `mvn install`
 ```
-   `~/gs-admin-training/lab10-hot_deploy$ mvn install`
+   `~/gs-admin-training/lab09-hot_deploy$ mvn install`
     
     
     [INFO] Reactor Summary:
@@ -91,16 +91,16 @@ The steps are the same as you have done in lab05.
 3. Open a new terminal and navigate to `$GS_HOME/bin/`
            
 4. Use the gs CLI to deploy BillBuddy_Space.  
-   `./gs.sh pu deploy BillBuddyPU ~/gs-admin-training/lab10-hot_deploy/BillBuddy_Space/target/BillBuddy_Space.jar`
+   `./gs.sh pu deploy BillBuddyPU ~/gs-admin-training/lab09-hot_deploy/BillBuddy_Space/target/BillBuddy_Space.jar`
 
 #### 3	Run BillBuddyAccountFeeder from Intellij
 
 1. Set IntelliJ path variables (under preferences).
 
 ###### Add GS_LOOKUP_GROUPS & GS_LOOKUP_LOCATORS
-2. Copy the `~/gs-admin-training/lab10-hot_deploy/runConfigurations` directory into Intellij's .idea directory and restart Intellij.
+2. Copy the `~/gs-admin-training/lab09-hot_deploy/runConfigurations` directory into Intellij's .idea directory and restart Intellij.
 ```
-  cd ~/gs-admin-training/lab10-hot_deploy
+  cd ~/gs-admin-training/lab09-hot_deploy
   cp -r runConfigurations .idea/
 ```
 
@@ -140,7 +140,7 @@ Use the same instructions as used for the BillBuddyAccountFeeder.
 
 ### Change the BillBuddy application logic - we will just change a log message.
 
-1. Open `~/gs-admin-training/lab10-hot_deploy/BillBuddy_Space/src/main/java/com/gs/billbuddy/events/ProcessingFeePollingEventContainer.java` class with IntelliJ.
+1. Open `~/gs-admin-training/lab09-hot_deploy/BillBuddy_Space/src/main/java/com/gs/billbuddy/events/ProcessingFeePollingEventContainer.java` class with IntelliJ.
 2. Verify that you see this line at the end of the class:
 ```
     log.info("ProcessingFeeTransaction updates merchants transactionFeeAmount. Merchant: " + merchant.getName() +
@@ -160,7 +160,7 @@ Use the same instructions as used for the BillBuddyAccountFeeder.
          
 1. Run mvn install.
 ```    
-    ~/gs-admin-training/lab10-hot_deploy$ mvn install
+    ~/gs-admin-training/lab09-hot_deploy$ mvn install
     
     [INFO] ------------------------------------------------------------------------
     [INFO] Reactor Summary:
@@ -178,7 +178,7 @@ Use the same instructions as used for the BillBuddyAccountFeeder.
     
 3. Rename the jar file.
 ```   
-    cd ~/gs-admin-training/lab10-hot_deploy/BillBuddy_Space/target
+    cd ~/gs-admin-training/lab09-hot_deploy/BillBuddy_Space/target
     mv BillBuddy_Space.jar BillBuddy_Space_V2.jar
 ``` 			
 

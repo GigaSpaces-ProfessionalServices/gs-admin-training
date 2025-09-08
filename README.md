@@ -14,11 +14,10 @@ For more information please see our [course syllabus](https://docs.google.com/sp
 * Lab06 - GigaSpaces Ops Manager
 * Lab07 - GigaSpaces Metrics
 * Lab08 - GigaSpaces manager
-* Lab09 - GigaSpaces REST Manager API
-* Lab10 - Hot Deploy Procedure
-* Lab11 - GigaSpaces Command Line Interface
-* Lab12 - GigaSpaces Java Admin API
-* Lab13 - Grid Security
+* Lab09 - Hot Deploy Procedure
+* Lab10 - GigaSpaces Command Line Interface
+* Lab11 - GigaSpaces Java Admin API
+* Lab12 - Grid Security
 * Lab14 - Kubernetes
 * Lab15 - Storage Optimization
 * Lab16 - Gigaspaces ODSX

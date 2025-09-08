@@ -1,4 +1,4 @@
-# gs-admin-training - lab11-cli
+# gs-admin-training - lab10-cli
 
 # GigaSpaces Command Line Interface
 
