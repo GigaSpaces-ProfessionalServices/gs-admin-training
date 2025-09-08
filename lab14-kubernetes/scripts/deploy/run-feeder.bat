@@ -1,5 +1,5 @@
 
-DEPLOY_DIR="%~dp0"
+set DEPLOY_DIR="%~dp0"
 
 cd %DEPLOY_DIR%\..\..\feeder
 

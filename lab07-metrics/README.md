@@ -4,12 +4,12 @@
 
 ## Lab Goals
 
-1. Explore GS metrics framework.
-2. Get familiar with Grafana and InfluxDB.
+ * Explore the GigaSpaces metrics framework.
+ * Get familiar with Grafana and InfluxDB.
 
 ## Lab Description
 In this lab we will focus on GigaSpaces Metrics functionalities.  
-To better know its capabilities you will use InfluxDB and Grafana to configure GS metrics integrated solution.
+To better know its capabilities you will setup InfluxDB and Grafana.
 
 ### 1 Download and install InfluxDB and Grafana
 

@@ -1,7 +1,7 @@
 
 set SCRIPTS_DIR="%~dp0"
 
-CWD=%cd%
+set CWD=%cd%
 
 cd %SCRIPTS_DIR%\..
 

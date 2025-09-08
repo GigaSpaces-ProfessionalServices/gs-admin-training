@@ -1,7 +1,7 @@
 
-DEPLOY_DIR="%~dp0"
+set DEPLOY_DIR="%~dp0"
 
-CWD=%cd%
+set CWD=%cd%
 
 call %DEPLOY_DIR%\..\settings.bat
 
@@ -46,7 +46,7 @@ set /p=Press enter to continue...
 
 echo ########################################
 echo # Installing space...
-helm install processor gigaspaces/xap-pu --version 17.1.2 --set schema=partitioned,partitions=1,ha=false,resourceUrl=pu.jar,image.repository=%DOCKER_USERNAME%\processor,image.tag=1.0-SNAPSHOT,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
+helm install processor gigaspaces/xap-pu --version 17.1.2 --set schema=partitioned,partitions=1,ha=false,resourceUrl=pu.jar,image.repository=%DOCKER_USERNAME%/processor,image.tag=1.0-SNAPSHOT,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
 echo # Space helm install done.
 echo ########################################
 set /p=Press enter to continue...

@@ -13,13 +13,13 @@ echo # Building the processor for Docker...
 echo ########################################
 cd %SCRIPTS_DIR%\..\processor
 
-docker buildx build --platform linux/amd64 --push --no-cache -t %DOCKER_USERNAME%\processor:1.0-SNAPSHOT .
+docker buildx build --platform linux/amd64 --push --no-cache -t %DOCKER_USERNAME%/processor:1.0-SNAPSHOT .
 
 rem  build the feeder
 echo ########################################
 echo # Building the feeder for Docker...
 echo ########################################
 cd %SCRIPTS_DIR%\..\feeder
-docker buildx build --platform linux/amd64 --push --no-cache -t %DOCKER_USERNAME%\feeder:1.0-SNAPSHOT .
+docker buildx build --platform linux/amd64 --push --no-cache -t %DOCKER_USERNAME%/feeder:1.0-SNAPSHOT .
 
 cd %CWD%

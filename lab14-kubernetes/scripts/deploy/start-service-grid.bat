@@ -1,5 +1,5 @@
 
-DEPLOY_DIR="%~dp0"
+set DEPLOY_DIR="%~dp0"
 
 call %DEPLOY_DIR%\..\settings.bat
 
