@@ -49,3 +49,7 @@ target/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# commonly used extension for search and replaced files #
+######################
+*~
