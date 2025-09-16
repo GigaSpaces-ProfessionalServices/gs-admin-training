@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    network_mode: host
+
+  influxdb:
+    image: influxdb:1.11
+    container_name: influxdb_v1
+    restart: unless-stopped
+    network_mode: host
+
+
