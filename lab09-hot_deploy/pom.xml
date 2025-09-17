@@ -2,9 +2,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.gigaspaces.dev.training</groupId>
-    <artifactId>lab10-hot_deploy</artifactId>
+    <artifactId>lab09-hot_deploy</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>lab10-hot_deploy</name>
+    <name>lab09-hot_deploy</name>
     <packaging>pom</packaging>
     <repositories>
         <repository>
@@ -14,7 +14,7 @@
     </repositories>
     <properties>
         <!-- 16.0 - 16.2 scanning not working due to spring upgrade-->
-        <gigaspaces.version>17.1.0</gigaspaces.version>
+        <gigaspaces.version>17.1.2</gigaspaces.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>

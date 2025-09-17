@@ -6,14 +6,14 @@
 
 Get experience with the hot deploy procedure using REST.  
 Hot deploy can be used in the following cases: 
- 
-1. Changes in PU business logic.
-2. Changes in data type schema.
-3. Changes in GigaSpaces version.
-4. Changes in host OS or Java version.
+
+ * Changes in PU business logic.
+ * Changes in data type schema.
+ * Changes in GigaSpaces version.
+ * Changes in host OS or Java version.
 
 ## Lab Description
-In this lab we will focus on Hot Deploy when there is are changes in PU business logic.
+In this lab we will focus on Hot Deploy when there are changes in PU business logic.
 
 We will:
 
@@ -39,7 +39,7 @@ We will:
 2. Build the project.
 ```        
     $ cd CustomRestPlugins/
-    $ mvn install
+    $ mvn package
     [INFO] ------------------------------------------------------------------------
     [INFO] Reactor Summary for CustomRestPlugins 1.0-SNAPSHOT:
     [INFO] 
@@ -58,7 +58,7 @@ We will:
 **Note:** For more information on extending the REST Manager, please visit our [online documentation](https://docs.gigaspaces.com/latest/admin/xap-manager-rest-pluggable.html).
  
 ### Run the BillBuddy application.
-The steps are the same as you have done in lab05.
+The steps are the same as you have done in lab05-BillBuddy_training_example.
 
 #### 1	Start gs-agent
 
@@ -69,15 +69,15 @@ The steps are the same as you have done in lab05.
     
 #### 2	Deploy BillBuddy_Space.jar
     
-1. Open `$GS_TRAINING_HOME/lab09-hot_deploy` project with Intellij (open pom.xml).
-2. Run `mvn install`
+1. Open `$GS_ADNIN_TRAINING/lab09-hot_deploy` project with Intellij (open pom.xml).
+2. Run `mvn package`
 ```
-   `~/gs-admin-training/lab09-hot_deploy$ mvn install`
+   `~/gs-admin-training/lab09-hot_deploy$ mvn package`
     
     
     [INFO] Reactor Summary:
     [INFO] 
-    [INFO] lab10-hot_deploy ............................................... SUCCESS [  0.204 s]
+    [INFO] lab09-hot_deploy ............................................... SUCCESS [  0.204 s]
     [INFO] BillBuddyModel ..................................... SUCCESS [  1.087 s]
     [INFO] BillBuddy_Space .................................... SUCCESS [  0.207 s]
     [INFO] BillBuddyAccountFeeder ............................. SUCCESS [  0.189 s]
@@ -108,14 +108,18 @@ The steps are the same as you have done in lab05.
 
 ###### This application writes Users, Merchants and Contracts to the Space
  
-4. Validate Users and Merchants were written to the space using the web Management Console (`localhost:8099`).  
-   Go to: Spaces Tab -> Data Types.
- 
+4. Validate Users and Merchants were written to the space using the REST API.
+   
+    * Go to: http://localhost:8090/v2, expand 'Spaces' and look for `spaces/{id}/objectsTypeInfo`
+    * Enter in the id field: BillBuddySpace
+
 ![Screenshot](./Pictures/Picture1.png)
 
-5. Query the list of Users by executing the following SQL:  
-   Note: Click the Data Type Name and the sql will be created for you:  
-   `SELECT * FROM com.gs.billbuddy.model.User WHERE rownum<5000`
+5. Query the list of Users by executing the following SQL.  
+   Note: Click the Data Type Name and the sql will be created for you.  
+   Once again in the using the REST Manager Swagger interface:
+    * In the 'Spaces' section expand `/spaces/{id}/query`
+    * Enter in the id field: BillBuddySpace, typeName: `com.gs.billbuddy.model.User` 
     
 ###### Note: Fully qualified class name is required.
 
@@ -131,20 +135,23 @@ A new Payment is created every second.
 1. Run the **BillBuddyPaymentFeeder** using Intellij: 
 Use the same instructions as used for the BillBuddyAccountFeeder.
 2. Validate Payments were written to the space.
-   Click the Payment Data Type Name as you did in section 3.3
-3. Go to the statistics operations and see that a payment is actually added every second.
+   Click the Payment Data Type Name as you did in the section above.
+3. In the REST Manager Swagger interface, go to `get /spaces/{id}/instances/{instanceId}/statistics/operations`
+4. For id, enter `BillBuddySpace`. For instanceId, enter for example `BillBuddySpace~1_1`.
+5. Check to see that a payment is actually added every second.
 
-![Screenshot](./Pictures/Picture3.png)
+## Hot Deploy
 
-## 6 Hot Deploy
+---
 
-### Change the BillBuddy application logic - we will just change a log message.
+### Modify the BillBuddy application logic
+We will just change a log message.
 
 1. Open `~/gs-admin-training/lab09-hot_deploy/BillBuddy_Space/src/main/java/com/gs/billbuddy/events/ProcessingFeePollingEventContainer.java` class with IntelliJ.
 2. Verify that you see this line at the end of the class:
 ```
     log.info("ProcessingFeeTransaction updates merchants transactionFeeAmount. Merchant: " + merchant.getName() +
-                        " new transactionFeeAmount is " + merchant.getFeeAmount());
+                        " - new transactionFeeAmount is " + merchant.getFeeAmount());
 ```                        
 3. Open the GSA console log (in the terminal window) and verify that you see this printing rolling for each Merchant.
 
@@ -156,16 +163,16 @@ Use the same instructions as used for the BillBuddyAccountFeeder.
                             " ** My new JAR ** - new transactionFeeAmount is " + merchant.getFeeAmount());
 ```          
           
- ### 6.2 Create a new JAR 
+### Create a new JAR 
          
-1. Run mvn install.
+1. Run mvn package.
 ```    
-    ~/gs-admin-training/lab09-hot_deploy$ mvn install
+    ~/gs-admin-training/lab09-hot_deploy$ mvn package
     
     [INFO] ------------------------------------------------------------------------
     [INFO] Reactor Summary:
     [INFO] 
-    [INFO] lab10-hot_deploy .............................................. SUCCESS [  0.215 s]
+    [INFO] lab09-hot_deploy .............................................. SUCCESS [  0.215 s]
     [INFO] BillBuddyModel ..................................... SUCCESS [  1.354 s]
     [INFO] BillBuddy_Space .................................... SUCCESS [  0.693 s]
     [INFO] BillBuddyAccountFeeder ............................. SUCCESS [  0.242 s]
@@ -177,17 +184,17 @@ Use the same instructions as used for the BillBuddyAccountFeeder.
 ```
     
 3. Rename the jar file.
-```   
+```
     cd ~/gs-admin-training/lab09-hot_deploy/BillBuddy_Space/target
     mv BillBuddy_Space.jar BillBuddy_Space_V2.jar
-``` 			
+```
 
-### 6.3 Upload the new JAR
+### Upload the new JAR
 
 1. Open the REST Manager API and navigate to Processing Units.
-
+```
    PUT /pus/resources (http://localhost:8090/v2/index.html#!/Processing_Units/put_pus_resources)
- 
+```
 2. Click on "Choose File" button and select BillBuddy_Space_V2.jar.  
 3. Click on "Try it out!" button and verify that the response code is 201.
 
@@ -196,12 +203,13 @@ Use the same instructions as used for the BillBuddyAccountFeeder.
 4. Verify that the new jar has been successfully uploaded:
 ![Screenshot](./Pictures/Picture7.png)
 
-### 6.4 Update the PU code using the plugin
+### Update the PU code using the plugin
 
 1. Run the following curl command:
 ```
-  curl -X PUT --header 'Accept: application/json' 'http://localhost:8090/v2/update/updatePu?oldResource=BillBuddy_Space.jar&newResource=BillBuddy_Space_V2.jar'
-```        
+curl -X PUT --header 'Accept: application/json' 'http://localhost:8090/update/updatePu?oldResource=BillBuddy_Space.jar&newResource=BillBuddy_Space_V2.jar'
+```
+###### Note: The `update/updatePu` REST endpoint is not deployed under the v2 context.
 2. Verify that the return code is 0.
 ```
         echo $?
@@ -211,15 +219,19 @@ Use the same instructions as used for the BillBuddyAccountFeeder.
 
 ![Screenshot](Pictures/Picture8.png)
 
-        
 4. Verify that the new jar has been removed:
 
 ![Screenshot](./Pictures/Picture9.png)
 
-### 6.5 Use the new PU
-1. Restart the Containers.  
-First restart backup only after primary:  
-Use the GS CLI. We will elaborate more on its capabilities on the next lesson and lab.
+### Use the new PU
+#### Restart the Containers.  
+1. First restart backup only after primary.  
+2. See the screenshot below for the list of commands. 
+   For your convenience:
+   ```
+   ./gs.sh space list-instance BillBuddySpace
+   ./gs.sh container restart <container id> # where container id follows the format hostname~PID
+   ```
 
 ![Screenshot](./Pictures/Picture10.png)
 
