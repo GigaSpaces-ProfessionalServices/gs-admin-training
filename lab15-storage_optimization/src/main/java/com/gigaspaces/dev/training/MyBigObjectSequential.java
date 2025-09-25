@@ -1,12 +1,12 @@
-package com.gigaspaces.test;
+package com.gigaspaces.dev.training;
 
 import com.gigaspaces.annotation.pojo.*;
 import com.gigaspaces.metadata.ClassBinaryStorageLayout;
 import com.gigaspaces.metadata.StorageType;
 import com.gigaspaces.metadata.index.SpaceIndexType;
 
-@SpaceClassBinaryStorage(layout = ClassBinaryStorageLayout.DIRECT)
-public class MyBigObject158Direct {
+@SpaceClassBinaryStorage(layout = ClassBinaryStorageLayout.SEQUENTIAL)
+public class MyBigObjectSequential {
     Integer id;
     String key1;
     String key2;
@@ -22,7 +22,7 @@ public class MyBigObject158Direct {
     String val10;
     String[] payload;
 
-    public MyBigObject158Direct() {
+    public MyBigObjectSequential() {
     }
 
     public void setVals(String val){
@@ -38,7 +38,7 @@ public class MyBigObject158Direct {
         setVal10(val+ "_10");
     }
 
-    public MyBigObject158Direct(Integer id, String key1, String key2) {
+    public MyBigObjectSequential(Integer id, String key1, String key2) {
         this.id = id;
         this.key1 = key1;
         this.key2 = key2;

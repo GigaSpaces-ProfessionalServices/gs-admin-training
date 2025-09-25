@@ -4,9 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>StorageOptimization</artifactId>
+    <groupId>com.gigaspaces.dev.training</groupId>
+    <artifactId>lab15-storage_optimization</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>lab15-storage_optimization</name>
     <repositories>
         <repository>
           <id>org.openspaces</id>
@@ -17,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <gigaspaces.version>17.1.0</gigaspaces.version>
+        <gigaspaces.version>17.1.2</gigaspaces.version>
     </properties>
     <dependencies>
         <dependency>
