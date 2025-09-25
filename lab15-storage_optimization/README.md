@@ -19,7 +19,7 @@ You will write each Space Object separately to the space and use Memory Analyzer
  * Order Index key - String *will be filled with 1 char*
  * Equal and Order key - String *will be filled with 1 char*
  * Ten properties - String *will be filled with 5 chars*
- * Payload - String array *will be filled with 150 chars*
+ * Payload - String array *will be filled with 120 chars*
 
 ###### 2. Annotate the 4 Objects as follows:
 
