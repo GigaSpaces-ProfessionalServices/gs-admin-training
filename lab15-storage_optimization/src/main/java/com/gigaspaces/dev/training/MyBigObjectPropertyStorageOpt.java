@@ -1,12 +1,15 @@
-package com.gigaspaces.test;
+package com.gigaspaces.dev.training;
 
-import com.gigaspaces.annotation.pojo.*;
-import com.gigaspaces.metadata.ClassBinaryStorageLayout;
-import com.gigaspaces.metadata.StorageType;
+import com.gigaspaces.annotation.pojo.SpaceId;
+import com.gigaspaces.annotation.pojo.SpaceIndex;
+import com.gigaspaces.annotation.pojo.SpacePropertyStorageAdapter;
+import com.gigaspaces.annotation.pojo.SpaceRouting;
+import com.gigaspaces.client.storage_adapters.BinaryAdapter;
+import com.gigaspaces.client.storage_adapters.ZipAdapter;
 import com.gigaspaces.metadata.index.SpaceIndexType;
 
-@SpaceClassBinaryStorage(layout = ClassBinaryStorageLayout.SEQUENTIAL)
-public class MyBigObject158Sequential {
+
+public class MyBigObjectPropertyStorageOpt {
     Integer id;
     String key1;
     String key2;
@@ -22,10 +25,16 @@ public class MyBigObject158Sequential {
     String val10;
     String[] payload;
 
-    public MyBigObject158Sequential() {
+    public MyBigObjectPropertyStorageOpt() {
     }
 
-    public void setVals(String val){
+    public MyBigObjectPropertyStorageOpt(Integer id, String key1, String key2) {
+        this.id = id;
+        this.key1 = key1;
+        this.key2 = key2;
+    }
+
+     public void setVals(String val){
         setVal1(val);
         setVal2(val+ "_2");
         setVal3(val+ "_3");
@@ -36,12 +45,6 @@ public class MyBigObject158Sequential {
         setVal8(val+ "_8");
         setVal9(val+ "_9");
         setVal10(val+ "_10");
-    }
-
-    public MyBigObject158Sequential(Integer id, String key1, String key2) {
-        this.id = id;
-        this.key1 = key1;
-        this.key2 = key2;
     }
 
     @SpaceId
@@ -72,7 +75,7 @@ public class MyBigObject158Sequential {
         this.key2 = key2;
     }
 
-    @SpacePropertyStorage(StorageType.BINARY)
+    @SpacePropertyStorageAdapter(BinaryAdapter.class)
     public String getVal1() {
         return val1;
     }
@@ -81,7 +84,7 @@ public class MyBigObject158Sequential {
         this.val1 = val1;
     }
 
-    @SpacePropertyStorage(StorageType.BINARY)
+    @SpacePropertyStorageAdapter(BinaryAdapter.class)
     public String getVal2() {
         return val2;
     }
@@ -90,7 +93,7 @@ public class MyBigObject158Sequential {
         this.val2 = val2;
     }
 
-    @SpacePropertyStorage(StorageType.BINARY)
+    @SpacePropertyStorageAdapter(BinaryAdapter.class)
     public String getVal3() {
         return val3;
     }
@@ -99,7 +102,7 @@ public class MyBigObject158Sequential {
         this.val3 = val3;
     }
 
-    @SpacePropertyStorage(StorageType.BINARY)
+    @SpacePropertyStorageAdapter(BinaryAdapter.class)
     public String getVal4() {
         return val4;
     }
@@ -108,7 +111,7 @@ public class MyBigObject158Sequential {
         this.val4 = val4;
     }
 
-    @SpacePropertyStorage(StorageType.BINARY)
+    @SpacePropertyStorageAdapter(BinaryAdapter.class)
     public String getVal5() {
         return val5;
     }
@@ -117,7 +120,7 @@ public class MyBigObject158Sequential {
         this.val5 = val5;
     }
 
-    @SpacePropertyStorage(StorageType.BINARY)
+    @SpacePropertyStorageAdapter(BinaryAdapter.class)
     public String getVal6() {
         return val6;
     }
@@ -126,7 +129,7 @@ public class MyBigObject158Sequential {
         this.val6 = val6;
     }
 
-    @SpacePropertyStorage(StorageType.BINARY)
+    @SpacePropertyStorageAdapter(BinaryAdapter.class)
     public String getVal7() {
         return val7;
     }
@@ -135,7 +138,7 @@ public class MyBigObject158Sequential {
         this.val7 = val7;
     }
 
-    @SpacePropertyStorage(StorageType.BINARY)
+    @SpacePropertyStorageAdapter(BinaryAdapter.class)
     public String getVal8() {
         return val8;
     }
@@ -144,7 +147,7 @@ public class MyBigObject158Sequential {
         this.val8 = val8;
     }
 
-    @SpacePropertyStorage(StorageType.BINARY)
+    @SpacePropertyStorageAdapter(BinaryAdapter.class)
     public String getVal9() {
         return val9;
     }
@@ -153,7 +156,7 @@ public class MyBigObject158Sequential {
         this.val9 = val9;
     }
 
-    @SpacePropertyStorage(StorageType.BINARY)
+    @SpacePropertyStorageAdapter(BinaryAdapter.class)
     public String getVal10() {
         return val10;
     }
@@ -162,7 +165,7 @@ public class MyBigObject158Sequential {
         this.val10 = val10;
     }
 
-    @SpacePropertyStorage(StorageType.COMPRESSED)
+    @SpacePropertyStorageAdapter(ZipAdapter.class)
     public String[] getPayload() {
         return payload;
     }

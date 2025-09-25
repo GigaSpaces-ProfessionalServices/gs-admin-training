@@ -1,4 +1,4 @@
-package com.gigaspaces.test;
+package com.gigaspaces.dev.training;
 
 import com.gigaspaces.annotation.pojo.SpaceId;
 import com.gigaspaces.annotation.pojo.SpaceIndex;

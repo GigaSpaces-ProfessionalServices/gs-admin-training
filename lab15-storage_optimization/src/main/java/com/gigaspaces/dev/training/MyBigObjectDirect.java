@@ -1,15 +1,12 @@
-package com.gigaspaces.test;
+package com.gigaspaces.dev.training;
 
-import com.gigaspaces.annotation.pojo.SpaceId;
-import com.gigaspaces.annotation.pojo.SpaceIndex;
-import com.gigaspaces.annotation.pojo.SpacePropertyStorageAdapter;
-import com.gigaspaces.annotation.pojo.SpaceRouting;
-import com.gigaspaces.client.storage_adapters.BinaryAdapter;
-import com.gigaspaces.client.storage_adapters.ZipAdapter;
+import com.gigaspaces.annotation.pojo.*;
+import com.gigaspaces.metadata.ClassBinaryStorageLayout;
+import com.gigaspaces.metadata.StorageType;
 import com.gigaspaces.metadata.index.SpaceIndexType;
 
-
-public class MyBigObject152StorageOpt {
+@SpaceClassBinaryStorage(layout = ClassBinaryStorageLayout.DIRECT)
+public class MyBigObjectDirect {
     Integer id;
     String key1;
     String key2;
@@ -25,16 +22,10 @@ public class MyBigObject152StorageOpt {
     String val10;
     String[] payload;
 
-    public MyBigObject152StorageOpt() {
+    public MyBigObjectDirect() {
     }
 
-    public MyBigObject152StorageOpt(Integer id, String key1, String key2) {
-        this.id = id;
-        this.key1 = key1;
-        this.key2 = key2;
-    }
-
-     public void setVals(String val){
+    public void setVals(String val){
         setVal1(val);
         setVal2(val+ "_2");
         setVal3(val+ "_3");
@@ -45,6 +36,12 @@ public class MyBigObject152StorageOpt {
         setVal8(val+ "_8");
         setVal9(val+ "_9");
         setVal10(val+ "_10");
+    }
+
+    public MyBigObjectDirect(Integer id, String key1, String key2) {
+        this.id = id;
+        this.key1 = key1;
+        this.key2 = key2;
     }
 
     @SpaceId
@@ -75,7 +72,7 @@ public class MyBigObject152StorageOpt {
         this.key2 = key2;
     }
 
-    @SpacePropertyStorageAdapter(BinaryAdapter.class)
+    @SpacePropertyStorage(StorageType.BINARY)
     public String getVal1() {
         return val1;
     }
@@ -84,7 +81,7 @@ public class MyBigObject152StorageOpt {
         this.val1 = val1;
     }
 
-    @SpacePropertyStorageAdapter(BinaryAdapter.class)
+    @SpacePropertyStorage(StorageType.BINARY)
     public String getVal2() {
         return val2;
     }
@@ -93,7 +90,7 @@ public class MyBigObject152StorageOpt {
         this.val2 = val2;
     }
 
-    @SpacePropertyStorageAdapter(BinaryAdapter.class)
+    @SpacePropertyStorage(StorageType.BINARY)
     public String getVal3() {
         return val3;
     }
@@ -102,7 +99,7 @@ public class MyBigObject152StorageOpt {
         this.val3 = val3;
     }
 
-    @SpacePropertyStorageAdapter(BinaryAdapter.class)
+    @SpacePropertyStorage(StorageType.BINARY)
     public String getVal4() {
         return val4;
     }
@@ -111,7 +108,7 @@ public class MyBigObject152StorageOpt {
         this.val4 = val4;
     }
 
-    @SpacePropertyStorageAdapter(BinaryAdapter.class)
+    @SpacePropertyStorage(StorageType.BINARY)
     public String getVal5() {
         return val5;
     }
@@ -120,7 +117,7 @@ public class MyBigObject152StorageOpt {
         this.val5 = val5;
     }
 
-    @SpacePropertyStorageAdapter(BinaryAdapter.class)
+    @SpacePropertyStorage(StorageType.BINARY)
     public String getVal6() {
         return val6;
     }
@@ -129,7 +126,7 @@ public class MyBigObject152StorageOpt {
         this.val6 = val6;
     }
 
-    @SpacePropertyStorageAdapter(BinaryAdapter.class)
+    @SpacePropertyStorage(StorageType.BINARY)
     public String getVal7() {
         return val7;
     }
@@ -138,7 +135,7 @@ public class MyBigObject152StorageOpt {
         this.val7 = val7;
     }
 
-    @SpacePropertyStorageAdapter(BinaryAdapter.class)
+    @SpacePropertyStorage(StorageType.BINARY)
     public String getVal8() {
         return val8;
     }
@@ -147,7 +144,7 @@ public class MyBigObject152StorageOpt {
         this.val8 = val8;
     }
 
-    @SpacePropertyStorageAdapter(BinaryAdapter.class)
+    @SpacePropertyStorage(StorageType.BINARY)
     public String getVal9() {
         return val9;
     }
@@ -156,7 +153,7 @@ public class MyBigObject152StorageOpt {
         this.val9 = val9;
     }
 
-    @SpacePropertyStorageAdapter(BinaryAdapter.class)
+    @SpacePropertyStorage(StorageType.BINARY)
     public String getVal10() {
         return val10;
     }
@@ -165,7 +162,7 @@ public class MyBigObject152StorageOpt {
         this.val10 = val10;
     }
 
-    @SpacePropertyStorageAdapter(ZipAdapter.class)
+    @SpacePropertyStorage(StorageType.COMPRESSED)
     public String[] getPayload() {
         return payload;
     }
