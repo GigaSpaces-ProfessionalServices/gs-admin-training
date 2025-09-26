@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:os-core="http://www.openspaces.org/schema/core"
+       xmlns:os-events="http://www.openspaces.org/schema/events"
+       xmlns:os-remoting="http://www.openspaces.org/schema/remoting"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:blob-store="http://www.openspaces.org/schema/rocksdb-blob-store"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.openspaces.org/schema/core http://www.openspaces.org/schema/core/openspaces-core.xsd
+    http://www.openspaces.org/schema/events http://www.openspaces.org/schema/events/openspaces-events.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.openspaces.org/schema/rocksdb-blob-store http://www.openspaces.org/schema/rocksdb-blob-store/openspaces-rocksdb-blobstore.xsd
+    http://www.openspaces.org/schema/remoting http://www.openspaces.org/schema/remoting/openspaces-remoting.xsd">
+
+    <!-- ANNOTATION AND COMPONENT SCAN CONFIGURATION -->
+    <!-- Enable scan for OpenSpaces and Spring components -->
+    <context:component-scan base-package="com.gs.billbuddy.events" />
+    <context:component-scan base-package="com.gs.billbuddy.remoting" />
+
+    <!-- Enables the usage of @GigaSpaceContext annotation based injection. -->
+    <os-core:giga-space-context />
+    <!-- Enables Spring Annotation configuration -->
+    <context:annotation-config />
+    <!-- Enables using @Polling and @Notify annotations -->
+    <os-events:annotation-support />
+    <!-- Enables using @RemotingService as well as @ExecutorProxy (and others) 
+        annotations -->
+    <os-remoting:annotation-support />
+    <!-- Enables using @PreBackup, @PostBackup and other annotations -->
+    <os-core:annotation-support />
+    <!-- Transaction annotation support -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    <!-- SPACE CONFIGURATION -->
+    <!-- A bean representing a space (an IJSpace implementation). -->
+    <!--Blob Store-->
+    <!--
+      1. It's no longer required to explicitly name the partition paths
+      2. By default the rocksDb data files are stored under GS_HOME/work directory. The work directory can be changed with -Dcom.gs.work System Property.
+    <blob-store:rocksdb-blob-store persistent="true" id="rocksDbBlobstore" paths="[/tmp/memory-xtend-demo/db1,/tmp/memory-xtend-demo/db2,/tmp/memory-xtend-demo/db3,/tmp/memory-xtend-demo/db4]" mapping-dir="/tmp/memory-xtend-demo/mapping"/>
+      -->
+    <blob-store:rocksdb-blob-store id="rocksDbBlobstore" persistent="true"/>
+
+    <os-core:embedded-space id="space" space-name="BillBuddySpace">
+    <os-core:blob-store-data-policy blob-store-handler="rocksDbBlobstore">
+        <os-core:blob-store-cache-query class="com.gs.billbuddy.model.User" where="userAccountId = 1"/>
+    </os-core:blob-store-data-policy>
+    </os-core:embedded-space>
+    <!-- OpenSpaces simplified space API built on top of IJSpace/JavaSpace. -->
+    <os-core:giga-space id="gigaSpace" space="space"
+        tx-manager="transactionManager"/>
+
+    <!-- Defines a local Jini transaction manager. -->
+    <os-core:distributed-tx-manager id="transactionManager" />
+    <!-- Service exporter for exporting remote services -->
+    <os-remoting:service-exporter id="serviceExporter" />
+</beans>
