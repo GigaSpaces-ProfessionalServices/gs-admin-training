@@ -13,7 +13,7 @@ For more information please see our [course syllabus](https://docs.google.com/sp
  * lab05 - The Bill Buddy Application
  * lab06 - GigaSpaces Ops Manager
  * lab07 - GigaSpaces Metrics
- * lab08 - GigaSpaces manager
+ * lab08 - GigaSpaces Manager
  * lab09 - Hot Deploy Procedure
  * lab10 - GigaSpaces Command Line Interface
  * lab11 - GigaSpaces Java Admin API
