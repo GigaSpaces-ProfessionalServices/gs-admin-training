@@ -6,19 +6,19 @@ For more information please see our [course syllabus](https://docs.google.com/sp
 
 ## Following are the list of labs:
 
-* Lab01 - GigaSpaces setup and installation
-* Lab02 - GigaSpaces Basic Grid Overview
-* Lab03 - Grid Service Components
-* Lab04 - Application Components
-* Lab05 - The Bill Buddy Application
-* Lab06 - GigaSpaces Ops Manager
-* Lab07 - GigaSpaces Metrics
-* Lab08 - GigaSpaces manager
-* Lab09 - Hot Deploy Procedure
-* Lab10 - GigaSpaces Command Line Interface
-* Lab11 - GigaSpaces Java Admin API
-* Lab12 - Grid Security
-* Lab14 - Kubernetes
-* Lab15 - Storage Optimization
-* Lab16 - Gigaspaces ODSX
-* Lab17 - MemoryXtend
+ * lab01 - GigaSpaces setup and installation
+ * lab02 - GigaSpaces Basic Grid Overview
+ * lab03 - Grid Service Components
+ * lab04 - Application Components
+ * lab05 - The Bill Buddy Application
+ * lab06 - GigaSpaces Ops Manager
+ * lab07 - GigaSpaces Metrics
+ * lab08 - GigaSpaces manager
+ * lab09 - Hot Deploy Procedure
+ * lab10 - GigaSpaces Command Line Interface
+ * lab11 - GigaSpaces Java Admin API
+ * lab12 - Grid Security
+ * lab13 - MemoryXtend
+ * lab14 - Kubernetes
+ * lab15 - Storage Optimization
+ * lab16 - Gigaspaces ODSX
