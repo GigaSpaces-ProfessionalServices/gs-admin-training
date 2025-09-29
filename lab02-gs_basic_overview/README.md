@@ -7,10 +7,9 @@
 *   Be introduced to and experience Grid Service Components.
 
 ###### Lab Description
-In this lab you will start GigaSpaces service grid and inspect the runtime grid, aka service grid, in the GS-UI.
+In this lab you will start GigaSpaces service grid. The service grid is the core set of processes that runs GigaSpaces and typically consists of Grid Service Agents, Managers and Grid Service Containers. We will then inspect the service grid in the GS-UI.
 
-## 1	Start GS Infrastructure
-
+## 1	Start the GigaSpaces service grid
 1. Goto `$GS_HOME/bin`
 2. Run: `./gs.sh host run-agent --auto --gsc=2`
 3. Start gs-ui using: `./gs-ui.sh`
