@@ -7,7 +7,7 @@
 *   Be introduced to and experience Grid Service Components.
 
 ###### Lab Description
-In this lab you will start GS infrastructure services and inspect the runtime grid, aka service grid, in the GS-UI.
+In this lab you will start GigaSpaces service grid and inspect the runtime grid, aka service grid, in the GS-UI.
 
 ## 1	Start GS Infrastructure
 
