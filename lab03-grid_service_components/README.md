@@ -7,9 +7,9 @@
 *   Be introduced to and experience Grid Service Components.
 
 ###### Lab Description
-In this lab you will start GS infrastructure services and inspect the runtime grid, aka service grid, in the GS-UI.
+In this lab you will start the GigaSpaces service grid and inspect it in the GS-UI.
 
-## 1	Start GS Infrastructure
+## 1	Start the GigaSpaces service grid
 
 1. Go to `$GS_HOME/bin`
 2. Run: `./gs.sh host run-agent --auto --gsc=2`
