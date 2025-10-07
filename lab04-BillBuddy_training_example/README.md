@@ -12,20 +12,20 @@ In this lab we will focus on deployment and the application and not be concerned
 
 #### 1	Start gs-agent
 
-1. Navigate to `%GS_HOME%/bin`
+1. Navigate to `$GS_HOME/bin`
         
 2. Start the Service Grid with a local Manager server and 5 GSCs:
-```
-./gs.sh host run-agent --auto --gsc=5
-```
+    ```
+    ./gs.sh host run-agent --auto --gsc=5
+    ```
     
 #### 2	Deploy BillBuddy_Space
     
-1. Open `%GS_TRAINING_HOME%/lab04-BillBuddy_training_example` project with Intellij (open pom.xml).
-2. Run `mvn install`
+1. Open `$GS_TRAINING_HOME/lab04-BillBuddy_training_example` project with Intellij (open pom.xml).
+2. Run `mvn package`
 
 ```
-    ~/gs-admin-training/lab04-BillBuddy_training_example$ mvn install
+    ~/gs-admin-training/lab04-BillBuddy_training_example$ mvn package
     
     
     [INFO] Reactor Summary:
@@ -49,33 +49,28 @@ For example set `GS_LOOKUP_LOCATORS=localhost` and `GS_LOOKUP_GROUPS=xap-17.1.0`
 
 4. Copy the runConfigurations directory to the Intellij .idea directory to enable the Java Application configurations. Restart Intellij.
 
-5. Open a new terminal and navigate to `%GS_HOME%/bin`
-```
-cd %GS_HOME%/bin
-```
+5. Open a new terminal and navigate to `$GS_HOME/bin`
+    ```
+    cd $GS_HOME/bin
+    ```
 6. Use GS CLI to deploy BillBuddy_Space:
-``` 
-./gs.sh pu deploy BillBuddySpace ~/gs-admin-training/lab04-gs_admin_training/BillBuddy_Space/target/BillBuddy_Space.jar 
-```
+    ``` 
+    ./gs.sh pu deploy BillBuddySpacePU ~/gs-admin-training/lab04-BillBuddy_training_example/BillBuddy_Space/target/BillBuddy_Space.jar 
+    ```
 #### 3	Run BillBuddyAccountFeeder from Intellij
 
 1. From the Intellij run configuration select BillBuddyAccountFeeder and run it.
 
 ###### This application writes Users, Merchants and Contracts to the Space
  
-2. Validate Users and Merchants were written to the space using the web Management Console `localhost:8099`  
-Go to: Spaces Tab -> Data Types.
- 
-![Screenshot](./Pictures/Picture1.png)
+2. Validate Users and Merchants were written to the space. Please refer to 'lab04-application_components' for instructions on how to verify data types. 
 
-3. Query the list of Users by executing the following SQL: <br/>
-Click the Data Type Name and the sql will be created for you: <br/>
-```
-    SELECT * FROM com.gs.billbuddy.model.User WHERE rownum<5000
-```    
+3. Query the list of Users by executing the following SQL:  
+   Please refer to 'lab04-application_components' for instructions on how to query a space.
+    ```
+        SELECT * FROM com.gs.billbuddy.model.User WHERE rownum<5000
+    ```    
 ###### Note: Fully qualified class name is required.
-
-![Screenshot](./Pictures/Picture2.png)
 
 #### 4	Run BillBuddyPaymentFeeder project
 The BillBuddyPaymentFeeder application creates payments by randomly choosing a user, a merchant and an amount and performs the initial process of a payment.  
@@ -83,35 +78,37 @@ This includes deposit and withdrawal updates of each party’s balance appropria
 After the payment is initially processed it is written to the space for further processing.  
 A new Payment is created every second.
  
-1. Run the BillBuddyPaymentFeeder using Intellij: 
-Use the same instructions as used for the BillBuddyAccountFeeder.
+1. Run the BillBuddyPaymentFeeder using Intellij:  
+   Use the same instructions as used for the BillBuddyAccountFeeder.
 
-2. Validate Payments were written to the space. 
-Click the Payment Data Type Name as you did in section 3.3
+2. Validate Payments were written to the space.  
+   Click the Payment Data Type Name as you did in section 3.3
  
-3. Go to the statistics operations and see that a payment is actually added every second.
-
-![Screenshot](./Pictures/Picture3.png)
-
+3. Go to the statistics operations and see that a payment is actually added every second.  
+   Please review 'lab04-application_components' for information on operations statistics.
 4. Go to the Data Types view. Which objects counts are increasing?
 
 #### 5 Deploy BillBuddyWebApplication project
 
-1. Open a new Terminal and navigate to `%GS_HOME%/bin`
+1. Open a new Terminal and navigate to `$GS_HOME/bin`
 
 2. Use the GS CLI to deploy BillBuddyWebApplication:
 ``` 
 ./gs.sh pu deploy --property=web.port=8082 BillBuddyWebApplication ~/gs-admin-training/lab04-BillBuddy_training_example/BillBuddyWebApplication/target/BillBuddyWebApplication.war
 ```
-3. Validate the application is deployed. 
-Go to the 'Deployed Processing Units' tab and expand the BillBuddyWebApplication PU.
+3. Validate the application is deployed.   
+   Using the `$GS_HOME/bin/gs-ui.sh`, go to the 'Deployed Processing Units' tab and click on the BillBuddyWebApplication PU.
 
-![Screenshot](./Pictures/Picture4.png)
+   ![Screenshot](./Pictures/webappdeployment.png)
 
-4. Click on Config.
-The host, port and context-path should be used as a url to reach the BillBuddy web application: 
+4. Click on Config.  
+   The host, port and context-path should be used as a url to reach the BillBuddy web application: 
 
-![Screenshot](./Pictures/Picture5.png)
+    ![Screenshot](./Pictures/billbuddyapp.png)
 
 5. Congratulations, you have deployed the BillBuddy web application!  
-Navigate through the application pages and investigate it.
+   Navigate through the application pages and investigate it.
+
+---
+## Additional Resources
+[Deployment using other UIs](./deploy.md)
