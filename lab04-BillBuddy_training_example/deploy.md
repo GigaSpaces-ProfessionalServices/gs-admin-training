@@ -82,7 +82,7 @@ Using the REST Manager, deployment is a two-step process that requires the artif
    |Backups|1|
    |Max Instances Per VM|Gets filled in with 1 automatically|
 
-5. Refer to 'lab04-application_components' for further information on checking the processing unit.
+5. Refer to 'lab03-application_components' for further information on checking the processing unit.
 
 ## opsui
 1. In a browser window open`localhost:8090`
@@ -102,7 +102,7 @@ Using the REST Manager, deployment is a two-step process that requires the artif
    
    ![Screenshot](./Pictures/opsui/deploywizard.png)   
 
-5. Refer to 'lab04-application_components' for further information on checking the processing unit.
+5. Refer to 'lab03-application_components' for further information on checking the processing unit.
 
 ## webui
 1. Go to `$GS_HOME/bin` and run `gs-webui.sh`
@@ -121,4 +121,4 @@ Using the REST Manager, deployment is a two-step process that requires the artif
    ![Screenshot](./Pictures/webui/deploywizard.png)
    Then click `Deploy`
 
-5. Refer to 'lab04-application_components' for further information on checking the processing unit.
+5. Refer to 'lab03-application_components' for further information on checking the processing unit.
