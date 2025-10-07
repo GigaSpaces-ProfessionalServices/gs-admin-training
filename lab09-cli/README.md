@@ -39,9 +39,79 @@ Please perform the following steps:
 ```
 **Note:** Please perform sections 1-4 **only** by using **GigaSpaces CLI**.
 
-Once done please use GigaSpaces Web Management Console (web-ui) to verify the outcome:  
-![Screenshot](./Pictures/Picture1.png)
-    
+Once done please use GigaSpaces REST Manager and curl to verify the outcome:  
+```
+curl -X GET --header 'Accept: application/json' 'http://localhost:8090/v2/pus'
+```
+Note the above command was copied from the Swagger UI at `http://localhost:8090`, Processing Units | 'GET' `/pus` `List processing units`.  
+You should the get below response in JSON *which has been pretty-printed* below.  
+```
+[
+    {
+        "name": "BillBuddyPU",
+        "processingUnitType": "stateful",
+        "resource": "BillBuddy_Space.jar",
+        "topology": {
+            "schema": "partitioned",
+            "partitions": 2,
+            "backupsPerPartition": 1
+        },
+        "sla": {
+            "requiresIsolation": false,
+            "zones": [
+                "stateful"
+            ],
+            "primaryZones": [],
+            "maxInstancesPerVM": 1,
+            "maxInstancesPerMachine": 0
+        },
+        "spaces": [
+            "BillBuddySpace"
+        ],
+        "scalable": false,
+        "status": "intact",
+        "quiesceDetails": {
+            "quiesced": false,
+            "description": "initial",
+            "readonly": false
+        },
+        "instances": [
+            "BillBuddyPU~1_1",
+            "BillBuddyPU~1_2",
+            "BillBuddyPU~2_1",
+            "BillBuddyPU~2_2"
+        ]
+    },
+    {
+        "name": "BillBuddyWebApp",
+        "processingUnitType": "web",
+        "resource": "BillBuddyWebApplication.war",
+        "topology": {
+            "instances": 1
+        },
+        "sla": {
+            "requiresIsolation": false,
+            "zones": [
+                "stateless"
+            ],
+            "primaryZones": [],
+            "maxInstancesPerVM": 0,
+            "maxInstancesPerMachine": 0
+        },
+        "spaces": [],
+        "scalable": true,
+        "status": "intact",
+        "quiesceDetails": {
+            "quiesced": false,
+            "description": "initial",
+            "readonly": false
+        },
+        "instances": [
+            "BillBuddyWebApp~1"
+        ]
+    }
+]
+```
 
 
 
