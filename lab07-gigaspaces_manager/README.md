@@ -36,13 +36,37 @@ See in the following screenshot node3 is done (booted and ready) and immediately
 
 ### 3 Explore the cluster
 
-Please enter the Web Management Console (web-ui).  
+Please connect to the REST Manager using the cli. You will need to use your local `$GS_HOME` installation. See commands below.   
 It should be available on all manager machines: node1, node2 and node3.  
-On node4 you shouldn't be able to use Web Management Console (web-ui) as it is a machine without GS Manager.
+On node4 you shouldn't be able to connect to the REST Manager as it is a machine without GigaSpaces Manager.  
+*Note: Use the --server option to connect to a specific GigaSpaces Manager node.*  
+```
+dixson@dixson-pc:~/gigaspaces-smart-cache-enterprise-17.1.2/bin$ ./gs.sh --server=10.211.55.101:8090 host list
 
-If you see the following, lab has been completed successfully by you :-)
+HOST NAME    HOST ADDRESS     CONTAINERS COUNT    
+node4        10.211.55.104    0                   
+node2        10.211.55.102    0                   
+node3        10.211.55.103    0                   
+node1        10.211.55.101    0                   
 
-![Screenshot](./Pictures/Picture2.png)
+
+SUMMARY        
+Hosts:         4    
+Containers:    0    
+
+dixson@dixson-pc:~/gigaspaces-smart-cache-enterprise-17.1.2/bin$ ./gs.sh --server=10.211.55.101:8090 info
+
+INFO
+Lookups Groups   xap-17.1.2
+Managers         node1,node2,node3
+Revision         17.1.2
+Started On       2025-10-07 18:30:25.514
+Version          17.1.2
+
+```
+
+If you see the above, lab has been completed successfully by you :-)
+
 
 **Tip:**  
 To login to the machines goto the Vagrant directory and run:<br>
