@@ -63,10 +63,10 @@ For example set `GS_LOOKUP_LOCATORS=localhost` and `GS_LOOKUP_GROUPS=xap-17.1.0`
 
 ###### This application writes Users, Merchants and Contracts to the Space
  
-2. Validate Users and Merchants were written to the space. Please refer to 'lab04-application_components' for instructions on how to verify data types. 
+2. Validate Users and Merchants were written to the space. Please refer to 'lab03-application_components' for instructions on how to verify data types. 
 
 3. Query the list of Users by executing the following SQL:  
-   Please refer to 'lab04-application_components' for instructions on how to query a space.
+   Please refer to 'lab03-application_components' for instructions on how to query a space.
     ```
         SELECT * FROM com.gs.billbuddy.model.User WHERE rownum<5000
     ```    
@@ -85,7 +85,7 @@ A new Payment is created every second.
    Click the Payment Data Type Name as you did in section 3.3
  
 3. Go to the statistics operations and see that a payment is actually added every second.  
-   Please review 'lab04-application_components' for information on operations statistics.
+   Please review 'lab03-application_components' for information on operations statistics.
 4. Go to the Data Types view. Which objects counts are increasing?
 
 #### 5 Deploy BillBuddyWebApplication project
