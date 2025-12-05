@@ -15,7 +15,7 @@ To better understand its capabilities you will set up InfluxDB and Grafana.
 
 1. Choose for your convenience, 1 of the following 2 options:
 
-    * InfluxDB regular installation:  
+    * InfluxDB regular installation  
       https://www.influxdata.com/get-influxdb/
 
     * InfluxDB installation using docker compose  
@@ -46,7 +46,7 @@ To better understand its capabilities you will set up InfluxDB and Grafana.
    * Grafana regular installation:  
      https://grafana.com/get
    * Grafana installation using docker compose:  
-     This step was done when `docker-compose up` was run for InfluxDB.
+     Grafana was already started when `docker-compose up` was run for InfluxDB.
 
 2. Verify Grafana is up and running
 
@@ -59,7 +59,10 @@ To better understand its capabilities you will set up InfluxDB and Grafana.
 Please follow instructions at:  
 https://docs.gigaspaces.com/latest/admin/web-management-monitoring.html#InstallingandConfiguringGrafana
 
+*Edit the* `$GS_HOME/config/metrics/metrics.xml` *file, look for the InfluxDB and Grafana sections and uncomment them*.
+
 ### 4 Run GS in Demo mode
+This will start the service grid and deploy a space.
 ```
 $GS_HOME/bin/gs.sh demo
 ```    
