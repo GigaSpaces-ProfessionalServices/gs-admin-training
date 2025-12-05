@@ -22,7 +22,7 @@ To better understand its capabilities you will set up InfluxDB and Grafana.
       https://docs.docker.com/compose/install/  
       `docker-compose` is used for the convenience of managing the network communication between multiple containers. 
       ```
-      cd $GS_ADMIN_TRAINING/lab07-metrics
+      cd $GS_ADMIN_TRAINING/lab06-metrics
       docker-compose up
       ```
 
