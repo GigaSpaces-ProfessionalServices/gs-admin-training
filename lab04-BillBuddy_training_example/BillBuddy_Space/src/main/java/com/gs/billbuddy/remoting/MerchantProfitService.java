@@ -28,8 +28,7 @@ public class MerchantProfitService implements IMerchantProfitService {
 		log.info("Start Merchant Profit service ");
 
 		Double merchantProfit = 0d;
-		Merchant merchant = gigaSpace.readById(Merchant.class, new Integer(
-				merchantAccountId));
+		Merchant merchant = gigaSpace.readById(Merchant.class, merchantAccountId);
 		if (merchant != null) {
 			merchantProfit = merchant.getReceipts() - merchant.getFeeAmount();
 			log.info("Profit for " + merchant.getName() + " is: "
