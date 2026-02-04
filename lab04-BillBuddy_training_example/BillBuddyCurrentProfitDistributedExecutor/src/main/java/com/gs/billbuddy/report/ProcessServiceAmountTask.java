@@ -34,7 +34,7 @@ public class ProcessServiceAmountTask implements
 	public Double execute() throws Exception {
     	log.info("ProcessServiceAmountTask- Start Execute.");
 	
-        Double processingFeesTotal=new Double(0);
+        Double processingFeesTotal = 0.0d;
    	
     	Merchant merchantTemplate = new Merchant();
     	Merchant[] merchants = gigaSpace.readMultiple(merchantTemplate, Integer.MAX_VALUE);

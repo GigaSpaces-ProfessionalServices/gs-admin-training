@@ -57,10 +57,10 @@ public class PaymentFeeder  {
     	Random random = new Random();
     	
     	int userId = (int)(userCount * random.nextDouble());
-    	user = gigaSpace.readById(User.class, new Integer(userId));
+    	user = gigaSpace.readById(User.class, userId);
     	
     	int merchantId = (int)(merchantCount * random.nextDouble());
-    	merchant = gigaSpace.readById(Merchant.class, new Integer(merchantId));
+    	merchant = gigaSpace.readById(Merchant.class, merchantId);
         
     	if (user != null && merchant != null) {
             Calendar calendar = Calendar.getInstance();
