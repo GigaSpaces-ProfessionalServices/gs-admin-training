@@ -9,7 +9,7 @@ services:
 
   influxdb:
     image: influxdb:1.11
-    container_name: influxdb_v1
+    container_name: influxdb-v1
     restart: unless-stopped
     network_mode: host
 
