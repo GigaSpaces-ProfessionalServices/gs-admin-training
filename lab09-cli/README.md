@@ -33,9 +33,9 @@ Please perform the following steps:
   ./gs.sh pu deploy --zones=stateful BillBuddyPU ~/gs-admin-training/lab04-BillBuddy_training_example/BillBuddy_Space/target/BillBuddy_Space.jar
 ```
 5. Deploy 2 instances of BillBuddyWebApplication, both instances should be located on 2 GSC of zone stateless.  
-   Use the war from lab5:
+   Use the war from lab04:
 ```
-  ./gs.sh pu deploy --zones=stateless BillBuddyWebApp ~/gs-admin-training/lab04-BillBuddy_training_example/BillBuddyWebApplication/target/BillBuddyWebApplication.war
+  ./gs.sh pu deploy --zones=stateless --instances=2 BillBuddyWebApp ~/gs-admin-training/lab04-BillBuddy_training_example/BillBuddyWebApplication/target/BillBuddyWebApplication.war
 ```
 **Note:** Please perform sections 1-4 **only** by using **GigaSpaces CLI**.
 
@@ -87,7 +87,7 @@ You should the get below response in JSON *which has been pretty-printed* below.
         "processingUnitType": "web",
         "resource": "BillBuddyWebApplication.war",
         "topology": {
-            "instances": 1
+            "instances": 2
         },
         "sla": {
             "requiresIsolation": false,
@@ -107,7 +107,8 @@ You should the get below response in JSON *which has been pretty-printed* below.
             "readonly": false
         },
         "instances": [
-            "BillBuddyWebApp~1"
+            "BillBuddyWebApp~1",
+            "BillBuddyWebApp~2"
         ]
     }
 ]

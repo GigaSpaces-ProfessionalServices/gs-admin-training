@@ -4,9 +4,9 @@
 
 #### 1 Setup
 
-##### 1.1 Download and install GigaSpaces version 17.1.2:
+##### 1.1 Download and install GigaSpaces version 17.3.0:
 
-1. Download GigaSpaces 17.1.2 from:
+1. Download GigaSpaces 17.3.0 from:
 
 [Downloads](https://support2.gigaspaces.com/support/solutions/articles/60000661815-downloads)
 

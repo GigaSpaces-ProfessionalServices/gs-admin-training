@@ -43,7 +43,7 @@ Note: Make sure you have set `GS_MANAGER_SERVERS` to localhost also.
 2. Add bean **DaoAuthenticationProvider**
 ```
     <bean id="authProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
-        <property name="userDetailsService" ref="roleBasedUserService" />
+        <constructor-arg ref="roleBasedUserService" />
         <property name="passwordEncoder" ref="passwordEncoder" />
     </bean>
  ```
@@ -117,7 +117,7 @@ For more information on secured spaces please visit the [GigaSpaces online docum
 
 5. Deploy the feeder PU
 ```
-./gs.sh --username gs-admin --password gs-admin pu deploy -p=username=gs-mngr -p=password=gs-mngr Feeder ~/$GS_ADMIN_TRAINING/lab11-security/feeder/target/feeder.jar
+./gs.sh --username gs-admin --password gs-admin pu deploy -p=username=gs-mngr -p=password=gs-mngr Feeder $GS_ADMIN_TRAINING/lab11-security/feeder/target/feeder.jar
 ```
 
 6. Query the data executing the following:

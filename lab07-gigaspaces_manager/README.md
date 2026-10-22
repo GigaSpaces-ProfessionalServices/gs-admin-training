@@ -41,7 +41,7 @@ It should be available on all manager machines: node1, node2 and node3.
 On node4 you shouldn't be able to connect to the REST Manager as it is a machine without GigaSpaces Manager.  
 *Note: Use the --server option to connect to a specific GigaSpaces Manager node.*  
 ```
-dixson@dixson-pc:~/gigaspaces-smart-cache-enterprise-17.1.2/bin$ ./gs.sh --server=10.211.55.101:8090 host list
+dixson@dixson-pc:~/gigaspaces-smart-cache-enterprise-17.3.0/bin$ ./gs.sh --server=10.211.55.101:8090 host list
 
 HOST NAME    HOST ADDRESS     CONTAINERS COUNT    
 node4        10.211.55.104    0                   
@@ -54,14 +54,14 @@ SUMMARY
 Hosts:         4    
 Containers:    0    
 
-dixson@dixson-pc:~/gigaspaces-smart-cache-enterprise-17.1.2/bin$ ./gs.sh --server=10.211.55.101:8090 info
+dixson@dixson-pc:~/gigaspaces-smart-cache-enterprise-17.3.0/bin$ ./gs.sh --server=10.211.55.101:8090 info
 
 INFO
-Lookups Groups   xap-17.1.2
+Lookups Groups   xap-17.3.0
 Managers         node1,node2,node3
-Revision         17.1.2
+Revision         17.3.0
 Started On       2025-10-07 18:30:25.514
-Version          17.1.2
+Version          17.3.0
 
 ```
 

@@ -11,8 +11,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <gs.version>17.1.2</gs.version>
-        <junit.version>4.13.1</junit.version>
+        <gs.version>17.3.0</gs.version>
+        <junit.version>4.13.2</junit.version>
         <slf4j.version>2.0.11</slf4j.version>
     </properties>
 
