@@ -11,7 +11,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gigaspaces.version>17.1.2</gigaspaces.version>
+        <gigaspaces.version>17.3.0</gigaspaces.version>
     </properties>
 
     <repositories>
@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.7</version>
+        <version>4.1.0</version>
         <relativePath/>
     </parent>
 

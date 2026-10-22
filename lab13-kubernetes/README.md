@@ -60,7 +60,7 @@ Before beginning to work with the data grid and xap, ensure that you have the fo
 ```
 
 4. In a separate terminal expose the minikube load balancer:  
-   Note: This step is _optional_ in this lab but is useful if deploying the **dih umbrella** chart.  
+   Note: This step is _optional_ in this lab but is useful if deploying the **smart-cache umbrella** chart.  
    `minikube tunnel`
 
 ---
@@ -83,19 +83,19 @@ Deployment steps are defined in the [deploy-k8s.sh script](scripts/deploy-k8s/de
 
    Note: This step is _optional_. The charts are unpacked in your current directory and can be useful for troubleshooting.
     ```
-    helm pull gigaspaces/dih    --version 17.1.2 --untar
-    helm pull gigaspaces/xap-pu --version 17.1.2 --untar
+    helm pull gigaspaces/smart-cache --version 17.3.0 --untar
+    helm pull gigaspaces/xap-pu      --version 17.3.0 --untar
     ```
 
 #### helm manager and operator deployment
 1. Deploy a **xap-manager** pod called manager:  
 ```
-helm install manager gigaspaces/xap-manager --version 17.1.2 --set global.security.enabled=false,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
+helm install manager gigaspaces/xap-manager --version 17.3.0 --set global.security.enabled=false,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
 ```
 2. Deploy the **xap-operator** and name it operator.  
    The xap-operator is responsible for deployment of PUs and managing the **pu** Custom Resource Definition:  
 ```
-helm install operator gigaspaces/xap-operator --version 17.1.2 --set global.security.enabled=false
+helm install operator gigaspaces/xap-operator --version 17.3.0 --set global.security.enabled=false
 ```
 
 #### View and monitor kubernetes deployment
@@ -103,7 +103,7 @@ helm install operator gigaspaces/xap-operator --version 17.1.2 --set global.secu
 ```
 $ kubectl get pods
 NAME                            READY   STATUS    RESTARTS   AGE
-manager-xap-manager-0           1/1     Running   0          5m
+xap-manager-0                   1/1     Running   0          5m
 xap-operator-674d8dcf65-vsk27   1/1     Running   0          5m
 ```
     
@@ -127,7 +127,7 @@ xap-operator-674d8dcf65-vsk27   1/1     Running   0          5m
 #### Deploy the processor docker image
 1. Deploy the processor using helm. See [deploy-k8s.sh script](scripts/deploy-k8s/deploy-k8s.sh):
 ```
-helm install processor gigaspaces/xap-pu --version 17.1.2 --set schema=partitioned,partitions=1,ha=false,resourceUrl=pu.jar,image.repository=$DOCKER_USERNAME/processor,image.tag=1.0-SNAPSHOT,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
+helm install processor gigaspaces/xap-pu --version 17.3.0 --set schema=partitioned,partitions=1,ha=false,resourceUrl=pu.jar,image.repository=$DOCKER_USERNAME/processor,image.tag=1.0-SNAPSHOT,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
 ```
 ```
 $ kubectl get pod
@@ -164,7 +164,7 @@ $GS_HOME/bin/gs.sh --server 192.168.49.2:31382 pu upload processor/target/data-p
 ```
 4. Deploy the processor using helm
 ```
-helm install processor gigaspaces/xap-pu --version 17.1.2 --set schema=partitioned,partitions=1,ha=false,resourceUrl=http://xap-manager-service:8090/v2/resources/data-processor.jar,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
+helm install processor gigaspaces/xap-pu --version 17.3.0 --set schema=partitioned,partitions=1,ha=false,resourceUrl=http://xap-manager-service:8090/v2/resources/data-processor.jar,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
 ```
 ---
 ### Deploy the feeder

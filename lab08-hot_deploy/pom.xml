@@ -14,7 +14,7 @@
     </repositories>
     <properties>
         <!-- 16.0 - 16.2 scanning not working due to spring upgrade-->
-        <gigaspaces.version>17.1.2</gigaspaces.version>
+        <gigaspaces.version>17.3.0</gigaspaces.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.1</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -24,24 +24,24 @@ function installWget {
 
 function downloadGS {
   #wget https://gigaspaces-releases-eu.s3.amazonaws.com/xap/16.1.1/gigaspaces-xap-enterprise-16.1.1.zip
-  wget https://gs-releases-us-east-1.s3.amazonaws.com/smart-cache/17.1.2/gigaspaces-smart-cache-enterprise-17.1.2.zip
+  wget https://gs-releases-us-east-1.s3.amazonaws.com/smart-cache/17.3.0/17.3.0/119/gigaspaces-smart-cache-enterprise-17.3.0.zip
   echo "download GS - Done!"
 }
 
 function unzipGS {
-  unzip gigaspaces-smart-cache-enterprise-17.1.2.zip
-  chown -R vagrant:vagrant gigaspaces-smart-cache-enterprise-17.1.2
+  unzip gigaspaces-smart-cache-enterprise-17.3.0.zip
+  chown -R vagrant:vagrant gigaspaces-smart-cache-enterprise-17.3.0
   echo "unzipping GS - Done!"
 }
 
 function activateGS {
-  echo "tryme">gigaspaces-smart-cache-enterprise-17.1.2/gs-license.txt
+  echo "tryme">gigaspaces-smart-cache-enterprise-17.3.0/gs-license.txt
   echo "activating GS - Done!"
 }
 
 function startGS {
   echo "#!/usr/bin/env bash" > /home/vagrant/start_GS.sh
-  echo "su - vagrant -c \"/usr/bin/nohup /home/vagrant/gigaspaces-smart-cache-enterprise-17.1.2/bin/gs.sh host run-agent --auto > /home/vagrant/start_GS.out 2>&1 &\"" >> /home/vagrant/start_GS.sh
+  echo "su - vagrant -c \"/usr/bin/nohup /home/vagrant/gigaspaces-smart-cache-enterprise-17.3.0/bin/gs.sh host run-agent --auto > /home/vagrant/start_GS.out 2>&1 &\"" >> /home/vagrant/start_GS.sh
   chown vagrant:vagrant /home/vagrant/start_GS.sh
   chmod +x /home/vagrant/start_GS.sh
   /home/vagrant/start_GS.sh
@@ -70,9 +70,9 @@ echo "activating GS"
 activateGS
 echo "setting manager GS"
 if [ -z "$1" ]; then
-  echo -e "\nexport GS_MANAGER_SERVERS=\"localhost\"">>gigaspaces-smart-cache-enterprise-17.1.2/bin/setenv-overrides.sh
+  echo -e "\nexport GS_MANAGER_SERVERS=\"localhost\"">>gigaspaces-smart-cache-enterprise-17.3.0/bin/setenv-overrides.sh
 else
-  echo -e "\nexport GS_MANAGER_SERVERS=\"$1\"">>gigaspaces-smart-cache-enterprise-17.1.2/bin/setenv-overrides.sh
+  echo -e "\nexport GS_MANAGER_SERVERS=\"$1\"">>gigaspaces-smart-cache-enterprise-17.3.0/bin/setenv-overrides.sh
 fi
 echo "setting manager GS - Done!"
 echo "starting GS"

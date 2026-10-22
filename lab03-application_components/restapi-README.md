@@ -54,7 +54,7 @@ The logs are stored in the `$GS_HOME/logs` directory. `cd` to this directory.
    |---|---|
    |**name**|`BillBuddy-space`|
    |**partitions**|2|
-   |**ha**|true|
+   |**backups**|true|
 
    Click on the `Try it out!` button.
 
@@ -116,7 +116,7 @@ We will now examine several operations that allow you to test, monitor and exami
 4. To get the operation statistics expand 'Spaces' | 'GET' `/spaces/{id}/statistics/operations` `Get Space operations statistics`.
    ![Screenshot](./Pictures/restapi/spacestatsexpanded.png)
 
-   Enter for id: `BililBuddy-space`, then click the `Try it now!` button.
+   Enter for id: `BillBuddy-space`, then click the `Try it now!` button.
    The result looks like:  
    ![Screenshot](./Pictures/restapi/spacestatsresponse.png)
 

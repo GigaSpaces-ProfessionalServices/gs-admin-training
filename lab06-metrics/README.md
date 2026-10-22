@@ -59,7 +59,22 @@ To better understand its capabilities you will set up InfluxDB and Grafana.
 Please follow instructions at:  
 https://docs.gigaspaces.com/latest/admin/web-management-monitoring.html#InstallingandConfiguringGrafana
 
-*Edit the* `$GS_HOME/config/metrics/metrics.xml` *file, look for the InfluxDB and Grafana sections and uncomment them*.
+*Edit the* `$GS_HOME/config/metrics/metrics.properties` *file, look for the InfluxDB and Grafana sections and uncomment them*.  
+(Beginning with 17.3.0, `metrics.xml` has been replaced by `metrics.properties`.) For this lab the following settings are sufficient:
+```
+metrics.registries=influxdb
+metrics.influxdb.uri=http://localhost:8086
+metrics.influxdb.db=mydb
+metrics.influxdb.step=10
+grafana.url=http://localhost:3000
+grafana.user=admin
+grafana.password=admin
+grafana.datasource.name=xap
+grafana.datasource.type=influxdb
+grafana.datasource.isDefault=true
+grafana.datasource.access=proxy
+```
+The metrics configuration is read when the service grid starts, so make these changes before running the next step.
 
 ### 4 Run GS in Demo mode
 This will start the service grid and deploy a space.
@@ -73,7 +88,7 @@ https://docs.gigaspaces.com/latest/admin/web-management-monitoring.html#GettingS
 
 ![Screenshot](./Pictures/Picture3.png)
 
-Note: The Grafana dashboards will have been loaded by GigaSpaces. However you can also find the dashboards at `$GS_HOME/config/grafana/dashboards`.
+Note: GigaSpaces creates the `xap` datasource in Grafana and tries to load the dashboards automatically. If no GigaSpaces dashboards appear in Grafana (check the manager log for `Failed to add dashboard`), import them manually from `$GS_HOME/config/grafana/dashboards` (Grafana: Dashboards | New | Import | Upload dashboard JSON file). Use the files at the top level of that directory (titles ending in `_new`), which match the 17.3.0 metric names; the files under `refs/` are the older dashboards and several of their panels will be empty.
 
 ### 6 Troubleshooting:
 

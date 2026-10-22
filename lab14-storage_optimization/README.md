@@ -46,7 +46,7 @@ You will write each Space Object separately to the space and use Memory Analyzer
     * Open the `$GS_ADMIN_TRAINING/lab14-storage_optimization` project in Intellij (open the pom.xml).
     * Copy runConfigurations to the Intellij .idea directory.
       ```
-      cp -r runConfigurations ./idea/
+      cp -r runConfigurations .idea/
       ```
     * Restart Intellij
     * Run the SpaceTestCase run configuration. You can modify the `-Dtest.case` System Property. This System Property controls which type to write.  
@@ -56,7 +56,7 @@ You will write each Space Object separately to the space and use Memory Analyzer
 ###### 6. Take a heap dump
  * Open the Ops Manager and take the heap dump of the space.
  * Alternatively, from the command line run, `jmap -dump:live,format=b,file=/path/to/dump/heap_<storage type>-<pid>.hprof <pid>`
- * Un-deploy "demo" space.
+ * Un-deploy "demo" space: `./gs.sh pu undeploy demo`
 
 ###### 7. Analyze the heap dump
  * Launch the Memory Analyzer Tool (MAT) and open the heap dump you have just created.
@@ -100,7 +100,7 @@ select * from com.gigaspaces.internal.server.storage.HybridEntryData where toStr
 <br/>
 <br/>
 
-##### MyBigObject158Direct - Footprint per Object 464 byte | Total Heap size (= 30.1)
+##### MyBigObjectDirect - Footprint per Object 464 byte | Total Heap size (= 30.1)
 
 ![Screenshot](Pictures/Picture3.png)
  * In the new HybridEntryData class it is nice to see the division between the serialized and the non-serialized properties.
@@ -110,7 +110,7 @@ select * from com.gigaspaces.internal.server.storage.HybridEntryData where toStr
 <br/>
 <br/>
 
-##### MyBigObject158Sequential - Footprint per Object 440 byte | Total Heap size (= 29.9)
+##### MyBigObjectSequential - Footprint per Object 440 byte | Total Heap size (= 29.9)
 ![Screenshot](Pictures/Picture4.png)
 
  * In the new HybridEntryData class it is nice to see the division between the serialized and the non-serialized properties.

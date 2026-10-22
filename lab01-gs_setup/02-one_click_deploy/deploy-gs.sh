@@ -18,21 +18,25 @@ function product_types() {
 
 function product_versions() {
   echo "List of available product versions:"
-  echo "[1] 17.1.2 - Compatible with Java 17"
-  echo "[2] 17.0.0 - Compatible with Java 17"
-  echo "[3] 16.4.3 - Compatible with Java 8,11"
+  echo "[1] 17.3.0 - Compatible with Java 17,21"
+  echo "[2] 17.1.2 - Compatible with Java 17"
+  echo "[3] 17.0.0 - Compatible with Java 17"
+  echo "[4] 16.4.3 - Compatible with Java 8,11"
 
   while true; do
     read -p 'Select product version by name or number:[1] ' -e gsVersion
       case $gsVersion in
-        ""|"1"|"17.1.2")
-          # user pressed enter |user typed 1 enter|user typed 17.1.2 enter
+        ""|"1"|"17.3.0")
+          # user pressed enter |user typed 1 enter|user typed 17.3.0 enter
+          gsVersion=17.3.0;
+          break;;
+        "2"|"17.1.2")
           gsVersion=17.1.2;
           break;;
-        "2"|"17.0.0")
+        "3"|"17.0.0")
           gsVersion=17.0.0;
           break;;
-        "3"|"16.4.3")
+        "4"|"16.4.3")
           gsVersion=16.4.3;
           break;;
         * ) echo 'Please enter product version or menu item number.';;
@@ -134,7 +138,12 @@ function installWget() {
 }
 
 function downloadGS() {
-  URL="https://gs-releases-us-east-1.s3.amazonaws.com/smart-cache/${gsVersion}/gigaspaces-smart-cache-enterprise-${gsVersion}.zip"
+  if [ "17.3.0" == "$gsVersion" ]; then
+    # 17.3.0 is published under a build-number sub-path
+    URL="https://gs-releases-us-east-1.s3.amazonaws.com/smart-cache/17.3.0/17.3.0/119/gigaspaces-smart-cache-enterprise-17.3.0.zip"
+  else
+    URL="https://gs-releases-us-east-1.s3.amazonaws.com/smart-cache/${gsVersion}/gigaspaces-smart-cache-enterprise-${gsVersion}.zip"
+  fi
   wget ${URL}
   echo "Download GS - Done!"
 }

@@ -46,7 +46,7 @@ You will understand MemoryXtend and its benefits by deploying a GigaSpaces appli
 
     ###### Add GS_LOOKUP_GROUPS & GS_LOOKUP_LOCATORS
 
-    For example set `GS_LOOKUP_LOCATORS=localhost` and `GS_LOOKUP_GROUPS=xap-17.1.2`
+    For example set `GS_LOOKUP_LOCATORS=localhost` and `GS_LOOKUP_GROUPS=xap-17.3.0`
 
 4. Copy the runConfigurations directory to the Intellij **.idea** directory to enable the Java Application configurations. Restart Intellij.
 
@@ -65,16 +65,52 @@ You will understand MemoryXtend and its benefits by deploying a GigaSpaces appli
 
     ###### This application writes Users, Merchants and Contracts to the Space
  
-2. Validate Users and Merchants were written to the space. Please refer to 'lab03-application_components' for instructions on how to check data types.  
+2. Validate Users and Merchants were written to the space. From `$GS_HOME/bin` run:
+    ```
+    $ ./gs.sh space info --type-stats BillBuddySpace
+    ...
+    TYPES    
+     DATA TYPE NAME                          OBJECTS COUNT    TEMPLATES COUNT    
+     com.gs.billbuddy.model.Merchant         16               0                  
+     com.gs.billbuddy.model.User             20               0                  
+     com.gs.billbuddy.model.Contract         16               0                  
+     java.lang.Object                        0                0                  
+    ```
+    Please refer to 'lab03-application_components' for other ways to check data types (Ops Manager, REST).
 
 
-3. Query the list of Users by executing the following SQL:
+3. Query the list of Users with the gs CLI:
     ```
-    SELECT * FROM com.gs.billbuddy.model.User WHERE rownum<5000
+    $ ./gs.sh space query --max-results=5000 BillBuddySpace com.gs.billbuddy.model.User
+
+    address                                    balance                creditLimit    name                status    userAccountId    
+    com.gs.billbuddy.model.Address@cd58fea     -557.1299999999999     -10000.0       Bill Klien          ACTIVE    11               
+    com.gs.billbuddy.model.Address@39a8739b    -597.3000000000001     -10000.0       Magic Jordan        ACTIVE    13               
+    ...
+
+    SUMMARY     
+    Results:    20    
     ```
-    Please refer to 'lab03-application_components' for instructions on how to query.
+    * Without `--max-results` the CLI returns at most 10 rows.
+    * Use `--columns` to select columns and `--filter` to add a WHERE predicate:
+    ```
+    $ ./gs.sh space query --columns=userAccountId,name,balance --filter="userAccountId<5" BillBuddySpace com.gs.billbuddy.model.User
+
+    userAccountId    name                balance                
+    1                James Johnson       -431.96000000000004    
+    3                Andrei Saizovsky    -393.54                
+    2                Peter Gardener      -534.07                
+    4                Petr Kirul          -436.96000000000004    
+
+    SUMMARY     
+    Results:    4    
+    ```
 
     ###### Note: Fully qualified class name is required.
+    ###### Note: Do not put spaces inside the `--filter` value (`"userAccountId<5"`, not `"userAccountId < 5"`). gs.sh passes its arguments on unquoted, so a space splits the filter and the command fails with `Unmatched arguments`.
+    ###### Note: `rownum` is not supported by the CLI filter (`Column 'rownum' not found in any table`); use `--max-results` instead.
+
+    Alternatively, the equivalent SQL `SELECT * FROM com.gs.billbuddy.model.User WHERE rownum<5000` can be run from a SQL client. Please refer to 'lab03-application_components' for instructions.
 
 
 
@@ -88,12 +124,26 @@ You will understand MemoryXtend and its benefits by deploying a GigaSpaces appli
    Use the same instructions as used for the BillBuddyAccountFeeder.
 
 2. Validate Payments were written to the space.    
-   Check the Payment Data Type Name as you did in section above for Merchants and Users.
+   Check the Payment Data Type Name as you did in section above for Merchants and Users (`./gs.sh space info --type-stats BillBuddySpace`).
+   Each Payment is also processed by the space, which writes a matching `com.gs.billbuddy.model.ProcessingFee`.
+   To look at some payments:
+    ```
+    $ ./gs.sh space query --max-results=5 --columns=paymentAmount,description,status --filter="paymentAmount>90" BillBuddySpace com.gs.billbuddy.model.Payment
+
+    paymentAmount    description    status       
+    97.83            GARDEN         PROCESSED    
+    99.47            SPORT          PROCESSED    
+    ...
+    ```
  
 3. Go to the statistics operations and see that a payment is actually added every second.  
-   Please refer to 'lab03-application_components' for instructions on how to check operations statistics.
+   Run the following a few times and watch `Write Count` and `Write per sec`:
+    ```
+    ./gs.sh space info --operation-stats BillBuddySpace
+    ```
+   Please refer to 'lab03-application_components' for other ways to check operations statistics.
 
-4. Check Data Types. See how many records are in the space.  
+4. Check Data Types. See how many records are in the space (`./gs.sh space info --type-stats BillBuddySpace`).  
 
 ### Undeployment
 
@@ -109,6 +159,10 @@ You will understand MemoryXtend and its benefits by deploying a GigaSpaces appli
 ./gs.sh pu deploy BillBuddySpace ~/gs-admin-training/lab12-memoryxtend/BillBuddy_Space/target/BillBuddy_Space.jar
 ```
 Once again, check the data types to see the records were restored from the disk back to the space.  
+The counts should match the counts you saw before undeploying:
+```
+./gs.sh space info --type-stats BillBuddySpace
+```
 
 ![Screenshot](./Pictures/Picture5.png)
 

@@ -53,7 +53,8 @@ We will:
     [INFO] ------------------------------------------------------------------------
 ```
 3. Install the custom rest plugin.  
-   Copy updatePlugin/target/updatePlugin.jar to `${GS_HOME}/lib/platform/manager/plugins/`
+   Copy updatePlugin/target/updatePlugin.jar to `${GS_HOME}/lib/platform/manager/plugins/` (create the `plugins` directory if it does not exist).  
+   The plugin is loaded when the Manager starts, so install it before starting the gs-agent in the next section.
 
 **Note:** For more information on extending the REST Manager, please visit our [online documentation](https://docs.gigaspaces.com/latest/admin/xap-manager-rest-pluggable.html).
  
