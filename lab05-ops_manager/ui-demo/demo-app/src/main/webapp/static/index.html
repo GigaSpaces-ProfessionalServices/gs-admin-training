@@ -1,0 +1,286 @@
+<html>
+<head>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/main.js"></script>
+</head>
+<body>
+
+<h1 style="padding-left: 20px">UI Demo</h1>
+
+
+<div class="col-md-3" style="padding-top:20px;">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">CPU Alert</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Service</label>
+                    <div class="col-sm-10">
+                        <select class="form-control stateful-services">
+                            <option value="" disabled selected>Select a service</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Duration</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control duration" value="30">
+                        <p class="help-block">(seconds)</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-default" onclick="triggerCPUAlertOnSpace(this);">Start</button>
+                    </div>
+                </div>
+
+                <div class="result">
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3" style="padding-top:20px;">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Memory Alert</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Service</label>
+                    <div class="col-sm-10">
+                        <select class="form-control stateful-services">
+                            <option value="" disabled selected>Select a service</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Duration</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control duration" value="60">
+                        <p class="help-block">(seconds)</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-default" onclick="triggerMemoryAlertOnService(this);">Start</button>
+                    </div>
+                </div>
+
+                <div class="result">
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-3" style="padding-top:20px;">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Unavailability Alert</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Service</label>
+                    <div class="col-sm-10">
+                        <select class="form-control stateless-services">
+                            <option value="" disabled selected>Select a service</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Instance</label>
+                    <div class="col-sm-10">
+                        <select class="form-control instances">
+                            <option value="" disabled selected>Select a service first</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Duration</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control duration" value="30">
+                        <p class="help-block">(seconds)</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-default" onclick="markUnavailable(this);">Start</button>
+                    </div>
+                </div>
+
+                <div class="result">
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3" style="padding-top:20px;">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">No-Backups Alert</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Service</label>
+                    <div class="col-sm-10">
+                        <select class="form-control stateful-services">
+                            <option value="" disabled selected>Select a service</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Instance</label>
+                    <div class="col-sm-10">
+                        <select class="form-control instances">
+                            <option value="" disabled selected>Select a service first</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Duration</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control duration" value="30">
+                        <p class="help-block">(seconds)</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-default" onclick="markUnavailable(this);">Start</button>
+                    </div>
+                </div>
+
+                <div class="result">
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-3" style="padding-top:20px;">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Create Containers</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Host</label>
+                    <div class="col-sm-10">
+                        <select class="form-control hosts">
+                            <option value="" disabled selected>Select a host</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-default" onclick="createContainer(this);">Create</button>
+                    </div>
+                </div>
+
+                <div class="result">
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<div class="col-md-3" style="padding-top:20px;">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Remove Containers</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Host</label>
+                    <div class="col-sm-10">
+                        <select class="form-control hosts">
+                            <option value="" disabled selected>Select a host</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Container</label>
+                    <div class="col-sm-10">
+                        <select class="form-control host-containers">
+                            <option value="" disabled selected>Select a host</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-default" onclick="removeContainer(this);">Remove</button>
+                    </div>
+                </div>
+
+                <div class="result">
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<div class="col-md-3" style="padding-top:20px;">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Scale Service</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Service</label>
+                    <div class="col-sm-10">
+                        <select class="form-control scalable-services">
+                            <option value="" disabled selected>Select a service</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-default" onclick="scaleUp(this);">Scale up</button>
+                        <button type="button" class="btn btn-default" onclick="scaleDown(this);">Scale down</button>
+                    </div>
+                </div>
+
+                <div class="result">
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
