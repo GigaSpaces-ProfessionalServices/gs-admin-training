@@ -13,12 +13,11 @@
         </repository>
     </repositories>
     <properties>
-        <gigaspaces.version>17.3.0</gigaspaces.version>
+        <gigaspaces.version>18.0.1</gigaspaces.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <jakarta.annotation.version>2.1.1</jakarta.annotation.version>
-        <!--spring.version>5.3.19</spring.version -->
     </properties>
     <modules>
         <module>BillBuddyModel</module>
@@ -29,14 +28,6 @@
         <module>BillBuddyCurrentProfitDistributedExecutor</module>
     </modules>
     <dependencies>
-<!--
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-            <version>${spring.version}</version>
-            <scope>provided</scope>
-        </dependency>
-  -->
         <dependency>
             <groupId>org.gigaspaces</groupId>
             <artifactId>xap-openspaces</artifactId>
@@ -54,14 +45,6 @@
             <artifactId>jakarta.annotation-api</artifactId>
             <version>${jakarta.annotation.version}</version>
         </dependency>
-<!--
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
-        </dependency>
--->
     </dependencies>
     <build>
         <defaultGoal>package</defaultGoal>
@@ -88,13 +71,6 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.7.1</version>
             </plugin>
-<!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>xap-maven-plugin</artifactId>
-                <version>${gsVersionPlugin}</version>
-            </plugin>
- -->
         </plugins>
     </build>
 </project>

@@ -18,25 +18,29 @@ function product_types() {
 
 function product_versions() {
   echo "List of available product versions:"
-  echo "[1] 17.3.0 - Compatible with Java 17,21"
-  echo "[2] 17.1.2 - Compatible with Java 17"
-  echo "[3] 17.0.0 - Compatible with Java 17"
-  echo "[4] 16.4.3 - Compatible with Java 8,11"
+  echo "[1] 18.0.0 - Compatible with Java 25"
+  echo "[2] 17.3.0 - Compatible with Java 17,21"
+  echo "[3] 17.1.2 - Compatible with Java 17"
+  echo "[4] 17.0.0 - Compatible with Java 17"
+  echo "[5] 16.4.3 - Compatible with Java 8,11"
 
   while true; do
     read -p 'Select product version by name or number:[1] ' -e gsVersion
       case $gsVersion in
-        ""|"1"|"17.3.0")
-          # user pressed enter |user typed 1 enter|user typed 17.3.0 enter
+        ""|"1"|"18.0.0")
+          # user pressed enter |user typed 1 enter|user typed 18.0.0 enter
+          gsVersion=18.0.0;
+          break;;
+        "2"|"17.3.0")
           gsVersion=17.3.0;
           break;;
-        "2"|"17.1.2")
+        "3"|"17.1.2")
           gsVersion=17.1.2;
           break;;
-        "3"|"17.0.0")
+        "4"|"17.0.0")
           gsVersion=17.0.0;
           break;;
-        "4"|"16.4.3")
+        "5"|"16.4.3")
           gsVersion=16.4.3;
           break;;
         * ) echo 'Please enter product version or menu item number.';;
@@ -106,12 +110,16 @@ function installJdk() {
       #sudo yum -y install java-1.8.0-openjdk
       #sudo yum -y install java-1.8.0-openjdk-devel
       sudo yum install -y java-11-openjdk-devel
+    elif [ "18.0.0" == "$gsVersion" ]; then
+      sudo yum -y install java-25-openjdk-devel
     else
       sudo yum -y install java-17-openjdk-devel
     fi
   elif [ "ubuntu" == "$osType" ]; then
     if [ "16.4.3" == "$gsVersion" ]; then
       sudo apt install -y openjdk-11-jdk
+    elif [ "18.0.0" == "$gsVersion" ]; then
+      sudo apt install -y openjdk-25-jdk
     else
       sudo apt install -y openjdk-17-jdk
     fi
@@ -138,7 +146,10 @@ function installWget() {
 }
 
 function downloadGS() {
-  if [ "17.3.0" == "$gsVersion" ]; then
+  if [ "18.0.0" == "$gsVersion" ]; then
+    # 18.0.0 is published under a build-number sub-path
+    URL="https://gs-releases-us-east-1.s3.amazonaws.com/smart-cache/18.0.0/18.0.0-ga/124/gigaspaces-smart-cache-enterprise-18.0.0.zip"
+  elif [ "17.3.0" == "$gsVersion" ]; then
     # 17.3.0 is published under a build-number sub-path
     URL="https://gs-releases-us-east-1.s3.amazonaws.com/smart-cache/17.3.0/17.3.0/119/gigaspaces-smart-cache-enterprise-17.3.0.zip"
   else
@@ -166,13 +177,13 @@ function settingGsManagers() {
 
 function startGS() {
   if [ ! -z "$containerMem" ]; then
-    echo -e "\nexport GS_GSC_OPTIONS=-Xms$containerMem -Xmx$containerMem">>gigaspaces-smart-cache-enterprise-${gsVersion}/bin/setenv-overrides.sh
+    echo -e "\nexport GS_GSC_OPTIONS=\"-Xms$containerMem -Xmx$containerMem\"">>gigaspaces-smart-cache-enterprise-${gsVersion}/bin/setenv-overrides.sh
   fi
 
   if [ -z "$containerCnt" ]; then
-    nohup gigaspaces-smart-cache-enterprise-${gsVersion}/bin/gs.sh host run-agent --auto &
+    nohup gigaspaces-smart-cache-enterprise-${gsVersion}/bin/gs.sh host run-agent --manager --webui --restv3 &
   else 
-    nohup gigaspaces-smart-cache-enterprise-${gsVersion}/bin/gs.sh host run-agent --auto --gsc=$containerCnt &
+    nohup gigaspaces-smart-cache-enterprise-${gsVersion}/bin/gs.sh host run-agent --manager --webui --restv3 --gsc=$containerCnt &
   fi;
   echo "Starting GS - Done!"
 }
@@ -190,9 +201,14 @@ function endAnnouncement() {
   echo "DATE `date +"%D"` / TIME `date +"%T"`"
   echo "VERSION ${gsType}"
   echo "GS_MANAGER_SERVERS : $gsManagerServers"
-  echo "URL for OpsManager :  http://$host1:8090"
-  echo "URL for GS Web-ui  :  http://$host1:8099"
-  echo "REST               :  http://$host1:8090/v2"
+  if [ "18.0.0" == "$gsVersion" ]; then
+    echo "URL for GS Web-ui  :  http://$host1:9090"
+    echo "REST               :  http://$host1:9090/api/v3/swagger-ui/index.html"
+  else
+    echo "URL for OpsManager :  http://$host1:8090"
+    echo "URL for GS Web-ui  :  http://$host1:8099"
+    echo "REST               :  http://$host1:8090/v2"
+  fi
   echo "#######################################################"
 }
 

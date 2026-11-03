@@ -13,10 +13,14 @@ In this lab you will start GigaSpaces service grid, deploy a Space, perform some
 ## 1 Start the service grid
 
 1. Go to `$GS_HOME/bin`
-2. Run: `./gs.sh host run-agent --auto --gsc=4`
-3. In a separate console window, run `./gs-ui.sh`.  
+2. Make sure `GS_MANAGER_SERVERS` is set in `setenv-overrides.sh`:
+   ```
+   export GS_MANAGER_SERVERS="localhost"
+   ```
+3. Run: `./gs.sh host run-agent --manager --webui --restv3 --gsc=4`
+4. In a separate console window, run `./gs-ui.sh`.  
    *Note: Beginning version 17.0, gs-ui now requires a separate download. Please contact support@gigaspaces.com for more information.*
-4. Under the 'Hosts' tab, click on one of the GSC processes to see the process information and log.
+5. Under the 'Hosts' tab, click on one of the GSC processes to see the process information and log.
 
 ![Screenshot](./Pictures/gsui/gscselected.png)
 
@@ -119,9 +123,8 @@ Basically we will ‘kill’ (using Windows Task Manager or kill -9) a GSC proce
 
 ## Additional resources
  * [Instructions for cli](./README.md)
- * [Instructions for REST API](./restapi-README.md)
- * [Instructions for ops-manager](./opsui-README.md)
- * [Instructions for webui](./webui-README.md)
+ * [Instructions for REST API](./restapiv3-README.md)
+ * [Instructions for SpaceDeck](./spacedeck-README.md)
 
 
 

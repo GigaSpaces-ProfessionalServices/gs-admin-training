@@ -13,13 +13,18 @@ In this lab you will start GigaSpaces service grid, deploy a Space, perform some
 ## 1 Start the service grid
 
 1. Go to `$GS_HOME/bin`
-2. Run: `./gs.sh host run-agent --auto --gsc=4`
+2. Make sure `GS_MANAGER_SERVERS` is set in `setenv-overrides.sh`:
+   ```
+   export GS_MANAGER_SERVERS="localhost"
+   ```
+3. Run: `./gs.sh host run-agent --manager --webui --restv3 --gsc=4`
 
 ###### Checking the logs
 The logs are stored in the `$GS_HOME/logs` directory. `cd` to this directory.
  * The default log file name format is `<date>~<time>-gigaspaces-<process>-<hostname>-<pid>.log`
  * The **gsa** log file contains the **GridServiceAgent** logs. This log will have messages concerning the start or restart of the GigaSpaces processes.
- * The **manager** log will contain messages from the LUS, Zookeeper and the REST Manager. We will go into further detail in this in a later chapter. On the service grid, this log will also have messages concerning the Processing Unit (PU)/ application deployment lifecycle.
+ * The **manager** log will contain messages from the LUS, Zookeeper and the GSM. We will go into further detail in this in a later chapter. On the service grid, this log will also have messages concerning the Processing Unit (PU)/ application deployment lifecycle.
+ * The **restv3** log contains the REST Manager (REST v3) logs and the **webui** log contains the web UI logs.
  * The **gsc** log is the **GridServiceContainer** log. Applications get deployed to a gsc, so deployment issues, PU issues will appear here.
    
 ## 2	Deploy a space
@@ -72,6 +77,7 @@ The logs are stored in the `$GS_HOME/logs` directory. `cd` to this directory.
      completion    Generate completion script for bash/zsh shells.
      host          List of available commands for local host operations
      container     List of available commands for container operations
+     mcp           List of available commands for MCP server operations
      info          Show the configured Manager information
      request       List of available commands for Request operations
      logger        Change log level of a service or a virtual machine
@@ -117,25 +123,27 @@ The logs are stored in the `$GS_HOME/logs` directory. `cd` to this directory.
 
    | Field Name| Value |
    |---|---|
-   | **Space (aka Data Grid) Name** | BillBuddy-space |
+   | **Space (aka Data Grid) Name** | demo |
    | **Number of Instances** | 2 |
    | **Backups (per each instance)** | 1 |
    | **Per VM** | 1 |
 
-   Run `./gs.sh space deploy --partitions=2 --ha BillBuddy-space`  
+   Note: This guide uses the space name `demo`, because the `writeObjects.sh` script in section 3 writes to the space `demo`.
+
+   Run `./gs.sh space deploy --partitions=2 --ha demo`  
     * `--partitions=2` - sets the number of partitions
     * `--ha` - means high availability and it is a shortcut to indicate "**Backups (per each instance)** = 1"
 
 3. You should see output similar to text below:
    ```
-   Instance [BillBuddy-space~1_1] successfully deployed
-   Instance [BillBuddy-space~2_1] successfully deployed
+   Instance [demo~1_1] successfully deployed
+   Instance [demo~2_1] successfully deployed
    ·
-   Instance [BillBuddy-space~2_2] successfully deployed
+   Instance [demo~2_2] successfully deployed
    ·
-   Instance [BillBuddy-space~1_2] successfully deployed
+   Instance [demo~1_2] successfully deployed
    
-   Space [BillBuddy-space] was successfully deployed at 2025-09-30 15:47:18
+   Space [demo] was successfully deployed at 2025-09-30 15:47:18
    ```
 
 ###### Examine the Processing Units
@@ -145,7 +153,7 @@ The logs are stored in the `$GS_HOME/logs` directory. `cd` to this directory.
    $ ./gs.sh pu list
    
    NAME               TYPE        SPACE              TOPOLOGY           STATUS    RESOURCE    QUIESCED    INSTANCES COUNT    
-   BillBuddy-space    STATEFUL    BillBuddy-space    partitioned 2,1    INTACT    datagrid    false       4                  
+   demo               STATEFUL    demo               partitioned 2,1    INTACT    datagrid    false       4                  
    
    
    SUMMARY              
@@ -158,10 +166,10 @@ The logs are stored in the `$GS_HOME/logs` directory. `cd` to this directory.
    $ ./gs.sh space list
    
    SPACE NAME         PROCESSING UNIT NAME    TOPOLOGY           ACTUAL/PLANNED INST.    INSTANCES ID           
-   BillBuddy-space    BillBuddy-space         partitioned 2,1    4/4                     BillBuddy-space~1_1    
-                                                                                         BillBuddy-space~1_2    
-                                                                                         BillBuddy-space~2_1    
-                                                                                         BillBuddy-space~2_2    
+   demo               demo                    partitioned 2,1    4/4                     demo~1_1               
+                                                                                         demo~1_2               
+                                                                                         demo~2_1               
+                                                                                         demo~2_2               
    
    
    SUMMARY     
@@ -173,13 +181,13 @@ The logs are stored in the `$GS_HOME/logs` directory. `cd` to this directory.
 6. To identify the primary and backup partitions, run `./gs.sh pu list-instances <PU name>`
 
    ```
-   $ ./gs.sh pu list-instances BillBuddy-space
+   $ ./gs.sh pu list-instances demo
    
    INSTANCE ID            HOST ID      CONTAINER ID        
-   BillBuddy-space~1_1    dixson-pc    dixson-pc~763534    
-   BillBuddy-space~1_2    dixson-pc    dixson-pc~763471    
-   BillBuddy-space~2_1    dixson-pc    dixson-pc~763506    
-   BillBuddy-space~2_2    dixson-pc    dixson-pc~763507    
+   demo~1_1               dixson-pc    dixson-pc~763534    
+   demo~1_2               dixson-pc    dixson-pc~763471    
+   demo~2_1               dixson-pc    dixson-pc~763506    
+   demo~2_2               dixson-pc    dixson-pc~763507    
    
    
    SUMMARY        
@@ -201,23 +209,24 @@ We will now examine several operations that allow you to test, monitor and exami
 ###### Write objects to the space
 1. Go to the project folder at `$GS_ADMIN_TRAINING/lab03-application_components`.
 2. Run `mvn package`
-3. Run the script located at `$GS_ADMIN_TRAINING/lab03-application_components/scripts/writeObjects.sh` in order to write 10,000 objects to the space.
+3. Run the script located at `$GS_ADMIN_TRAINING/lab03-application_components/scripts/writeObjects.sh` in order to write 10,000 objects to the space.  
+   Note: The script uses `$JAVA_HOME/bin/java` (or the `java` on your PATH if `JAVA_HOME` is not set). GigaSpaces 18.0 requires Java 25.
 
 ###### View operation statistics
 4. To get the operation statistics from the cli, run `./gs.sh space info --operation-stats <space name>`. For example,
    ```
-   $ ./gs.sh space info --operation-stats BillBuddy-space 
+   $ ./gs.sh space info --operation-stats demo 
    
    SPACE DETAILS           
-   Space Name              BillBuddy-space        
-   Processing Unit Name    BillBuddy-space        
+   Space Name              demo                   
+   Processing Unit Name    demo                   
    Topology                partitioned 2,1        
    Planned Instances       4                      
    Actual Instances        4                      
-   Instances               BillBuddy-space~1_1    
-                           BillBuddy-space~1_2    
-                           BillBuddy-space~2_1    
-                           BillBuddy-space~2_2    
+   Instances               demo~1_1               
+                           demo~1_2               
+                           demo~2_1               
+                           demo~2_2               
    
    OPERATIONS STATISTICS        
    Objects Count                10,000    
@@ -248,18 +257,18 @@ We will now examine several operations that allow you to test, monitor and exami
 ###### View data types
 5. Run `./gs.sh space info --type-stats <space name>` to get a summary of the data types in the space.
    ```
-   $ ./gs.sh space info --type-stats BillBuddy-space 
+   $ ./gs.sh space info --type-stats demo 
    
    SPACE DETAILS           
-   Space Name              BillBuddy-space        
-   Processing Unit Name    BillBuddy-space        
+   Space Name              demo                   
+   Processing Unit Name    demo                   
    Topology                partitioned 2,1        
    Planned Instances       4                      
    Actual Instances        4                      
-   Instances               BillBuddy-space~1_1    
-                           BillBuddy-space~1_2    
-                           BillBuddy-space~2_1    
-                           BillBuddy-space~2_2    
+   Instances               demo~1_1               
+                           demo~1_2               
+                           demo~2_1               
+                           demo~2_2               
    
    TYPES    
     DATA TYPE NAME                             OBJECTS COUNT    TEMPLATES COUNT    
@@ -268,9 +277,9 @@ We will now examine several operations that allow you to test, monitor and exami
    
    ```
 ###### Query the "MessagePOJO" type
-6. Run `./gs.sh space query --maxresults=<number of results> <space name> <type name>`, for example:
+6. Run `./gs.sh space query --max-results=<number of results> <space name> <type name>`, for example:
    ```
-   $ ./gs.sh space query --max-results=10 BillBuddy-space com.gigaspaces.dev.training.MessagePOJO
+   $ ./gs.sh space query --max-results=10 demo com.gigaspaces.dev.training.MessagePOJO
    
    content        counter    
    [B@4587623e    9937       
@@ -297,7 +306,8 @@ Basically we will ‘kill’ (using Windows Task Manager or kill -9) a GSC proce
 
 1. Previously, after we deployed the space, we ran `./gs.sh pu list-instances` and we could see the containerIds and therefore the PIDs associated with the GSCs. Choose 1 of the GSCs PID (with primary space instance on it) and use the Task Manager or (kill -9 for Linux) in order to kill the process.
 
-2. Once again, re-run `./gs.sh pu list-instance BillBuddy-space` in order to check the recovery status.
+2. Once again, run `./gs.sh space list-instances demo` in order to check the recovery status.  
+   Note: The killed instance may still be listed for up to a minute, until the Manager detects that the GSC is gone.
 
 3. The following is a summary of the self-healing process.
 
@@ -307,13 +317,13 @@ Basically we will ‘kill’ (using Windows Task Manager or kill -9) a GSC proce
  * After running `kill 763534` which was the GSC containing the primary for the 1st partition:
 
    ```
-   $ ./gs.sh space list-instances BillBuddy-space
+   $ ./gs.sh space list-instances demo
    
    INSTANCE ID            MODE       SUSPEND TYPE    HOST ID      CONTAINER ID        
-   BillBuddy-space~1_1    BACKUP     NONE            dixson-pc    dixson-pc~898349    
-   BillBuddy-space~1_2    PRIMARY    NONE            dixson-pc    dixson-pc~763471    
-   BillBuddy-space~2_1    PRIMARY    NONE            dixson-pc    dixson-pc~763506    
-   BillBuddy-space~2_2    BACKUP     NONE            dixson-pc    dixson-pc~763507    
+   demo~1_1               BACKUP     NONE            dixson-pc    dixson-pc~898349    
+   demo~1_2               PRIMARY    NONE            dixson-pc    dixson-pc~763471    
+   demo~2_1               PRIMARY    NONE            dixson-pc    dixson-pc~763506    
+   demo~2_2               BACKUP     NONE            dixson-pc    dixson-pc~763507    
    
    
    SUMMARY        
@@ -339,18 +349,17 @@ Basically we will ‘kill’ (using Windows Task Manager or kill -9) a GSC proce
 To undeploy a space the following can be run:  
 
 ```
-$ ./gs.sh pu undeploy BillBuddy-space
+$ ./gs.sh pu undeploy demo
 ·······
-Processing Unit [BillBuddy-space] was successfully undeployed at 2025-09-30 16:51:22
+Processing Unit [demo] was successfully undeployed at 2025-09-30 16:51:22
 ```
 You have un-deployed the space successfully!
 
 ---
 ## Additional resources
- * [Instructions for REST API](./restapi-README.md)
- * [Instructions for gs-ui](./gsui-README.md)
- * [Instructions for ops-manager](./opsui-README.md)
- * [Instructions for webui](./webui-README.md)
+ * [Instructions for REST API](./restapiv3-README.md)
+ * [Instructions for SpaceDeck](./spacedeck-README.md)
+ * [Instructions for gs-ui (legacy)](./gsui-README.md)
  
 
 

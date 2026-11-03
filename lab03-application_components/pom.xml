@@ -9,9 +9,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <gs.version>17.3.0</gs.version>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <gs.version>18.0.1</gs.version>
         <junit.version>4.13.2</junit.version>
         <slf4j.version>2.0.11</slf4j.version>
     </properties>
