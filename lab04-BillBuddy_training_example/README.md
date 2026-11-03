@@ -13,15 +13,23 @@ In this lab we will focus on deployment and the application and not be concerned
 #### 1	Start gs-agent
 
 1. Navigate to `$GS_HOME/bin`
-        
-2. Start the Service Grid with a local Manager server and 5 GSCs:
+
+2. Set the Manager server in `setenv-overrides.sh`.  
+   Edit `$GS_HOME/bin/setenv-overrides.sh` and uncomment/set `GS_MANAGER_SERVERS`:
     ```
-    ./gs.sh host run-agent --auto --gsc=5
+    export GS_MANAGER_SERVERS="localhost"
+    ```
+   Note: For a multi-host grid, use the host name(s) of the Manager server(s) instead of `localhost`.
+        
+3. Start the Service Grid with a local Manager server, the REST Manager (REST v3, port 9090), the web UI and 5 GSCs:
+    ```
+    ./gs.sh host run-agent --manager --webui --restv3 --gsc=5
     ```
     
 #### 2	Deploy BillBuddy_Space
     
-1. Open `$GS_TRAINING_HOME/lab04-BillBuddy_training_example` project with Intellij (open pom.xml).
+1. Open `$GS_TRAINING_HOME/lab04-BillBuddy_training_example` project with Intellij (open pom.xml).  
+   Note: GigaSpaces 18.0 requires Java 25. Set the IntelliJ project SDK (and `JAVA_HOME` for Maven) to a JDK 25.
 2. Run `mvn package`
 
 ```
@@ -45,7 +53,7 @@ In this lab we will focus on deployment and the application and not be concerned
 ###### Add GS_LOOKUP_GROUPS & GS_LOOKUP_LOCATORS
 3. Set IntelliJ path variables (under File | Settings | Appearance & Behavior | Path Variables)
 
-For example set `GS_LOOKUP_LOCATORS=localhost` and `GS_LOOKUP_GROUPS=xap-17.3.0`
+For example set `GS_LOOKUP_LOCATORS=localhost` and `GS_LOOKUP_GROUPS=xap-18.0.1`
 
 4. Copy the runConfigurations directory to the Intellij .idea directory to enable the Java Application configurations. Restart Intellij.
 
@@ -96,14 +104,42 @@ A new Payment is created every second.
 ``` 
 ./gs.sh pu deploy --property=web.port=8082 BillBuddyWebApplication ~/gs-admin-training/lab04-BillBuddy_training_example/BillBuddyWebApplication/target/BillBuddyWebApplication.war
 ```
-3. Validate the application is deployed.   
-   Using the `$GS_HOME/bin/gs-ui.sh`, go to the 'Deployed Processing Units' tab and click on the BillBuddyWebApplication PU.  
-   *Note: Beginning version 17.0, gs-ui requires a separate download. Without it, use the CLI instead: `./gs.sh pu list-instances BillBuddyWebApplication` shows the host the web application is running on, and the application is reachable at `http://<host>:8082/BillBuddyWebApplication/`.*
+3. Validate the application is deployed. In the same terminal, list the processing units:
+   ```
+   ./gs.sh pu list
+   ```
+   BillBuddyWebApplication should be listed (type WEB, status INTACT) next to BillBuddySpacePU:
+   ```
+   NAME                       TYPE        SPACE             TOPOLOGY           STATUS    RESOURCE                       QUIESCED    INSTANCES COUNT
+   BillBuddySpacePU           STATEFUL    BillBuddySpace    partitioned 2,1    INTACT    BillBuddy_Space.jar            false       4
+   BillBuddyWebApplication    WEB                           -                  INTACT    BillBuddyWebApplication.war    false       1
+   ```
+   Then list its instances to see which host the web application is running on (HOST ID):
+   ```
+   ./gs.sh pu list-instances BillBuddyWebApplication
+   ```
+   ```
+   INSTANCE ID                  HOST ID      CONTAINER ID
+   BillBuddyWebApplication~1    dixson-pc    dixson-pc~2870353
+   ```
+   Note: the CLI (and the REST Manager) do not show the web port. To confirm it, check the log of the container that runs the web application.  
+   The number after `~` in the CONTAINER ID is the container's process id, and it is part of the container's log file name (`<date>~<time>-gigaspaces-gsc_<n>-<host>-<pid>.log`):
+   ```
+   cd $GS_HOME/logs
+   grep "Deployed web application" *gsc*-2870353.log
+   ```
+   The line shows the address, port and context path of the web application:
+   ```
+   ... Deployed web application [127.0.1.1:8082/BillBuddyWebApplication]
+   ```
+
+   *Legacy: with gs-ui (`$GS_HOME/bin/gs-ui.sh`, a separate download since version 17.0), go to the 'Deployed Processing Units' tab, click on the BillBuddyWebApplication PU and click on Config. The `web.port` deployment property is shown:*
 
    ![Screenshot](./Pictures/webappdeployment.png)
 
-4. Click on Config.  
-   The host, port and context-path should be used as a url to reach the BillBuddy web application: 
+4. Build the url from the host, the `web.port` property used in the deploy command (8082) and the context path (the war name, `BillBuddyWebApplication`):  
+   `http://<host>:8082/BillBuddyWebApplication/`  
+   Open it in a browser to reach the BillBuddy web application: 
 
     ![Screenshot](./Pictures/billbuddyapp.png)
 

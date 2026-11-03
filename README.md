@@ -8,9 +8,8 @@ For more information please see our [course syllabus](https://docs.google.com/sp
 
 | Lab | Topic | Features | Directories |
 |-----|-------|----------|-------------|
-| 01 | GigaSpaces setup and installation | Introduction, one-click install script | [lab01-gs_setup/01-introduction](lab01-gs_setup/01-introduction)<br>[lab01-gs_setup/02-one_click_deploy](lab01-gs_setup/02-one_click_deploy) |
-| 02 | GigaSpaces Basic Grid Overview | Start the service grid, self-healing | [lab02-service_grid](lab02-service_grid) |
-| 03 | Application Components | Deploy/test/undeploy a space via CLI, REST, Ops Manager, GS-UI | [lab03-application_components](lab03-application_components) |
+| 01 | GigaSpaces setup and installation | Introduction, start the service grid, one-click install script | [lab01-gs_setup/01-introduction](lab01-gs_setup/01-introduction)<br>[lab01-gs_setup/02-one_click_deploy](lab01-gs_setup/02-one_click_deploy) |
+| 03 | Application Components | Deploy/test/undeploy a space via CLI, REST v3, SpaceDeck, GS-UI; self-healing | [lab03-application_components](lab03-application_components) |
 | 04 | The Bill Buddy Application | Deploy the BillBuddy space, feeders, distributed executor and web app | [lab04-BillBuddy_training_example](lab04-BillBuddy_training_example) |
 | 05 | GigaSpaces Ops Manager | Ops Manager UI demo | [lab05-ops_manager](lab05-ops_manager) |
 | 06 | GigaSpaces Metrics | InfluxDB, Grafana dashboards (Docker) | [lab06-metrics](lab06-metrics) |
