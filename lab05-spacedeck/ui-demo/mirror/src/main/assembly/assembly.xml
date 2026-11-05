@@ -1,0 +1,38 @@
+<assembly>
+    <id>assemble-pu</id>
+    <formats>
+        <format>jar</format>
+        <format>dir</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>target/classes</directory>
+            <lineEnding>keep</lineEnding>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>**/**</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <!-- Hibernate, spring-orm/spring-jdbc, HSQL and common, with their transitive dependencies.
+             The Spring jars that the GSC already has in $GS_HOME/lib/required are left out. -->
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveDependencies>true</useTransitiveDependencies>
+            <outputDirectory>lib</outputDirectory>
+            <excludes>
+                <exclude>org.springframework:spring-core</exclude>
+                <exclude>org.springframework:spring-beans</exclude>
+                <exclude>org.springframework:spring-context</exclude>
+                <exclude>org.springframework:spring-aop</exclude>
+                <exclude>org.springframework:spring-expression</exclude>
+                <exclude>org.springframework:spring-tx</exclude>
+                <exclude>commons-logging:commons-logging</exclude>
+                <exclude>io.micrometer:*</exclude>
+                <exclude>org.jspecify:jspecify</exclude>
+            </excludes>
+        </dependencySet>
+    </dependencySets>
+</assembly>
