@@ -11,7 +11,7 @@ For more information please see our [course syllabus](https://docs.google.com/sp
 | 01 | GigaSpaces setup and installation | Introduction, start the service grid, one-click install script | [lab01-gs_setup/01-introduction](lab01-gs_setup/01-introduction)<br>[lab01-gs_setup/02-one_click_deploy](lab01-gs_setup/02-one_click_deploy) |
 | 03 | Application Components | Deploy/test/undeploy a space via CLI, REST v3, SpaceDeck, GS-UI; self-healing | [lab03-application_components](lab03-application_components) |
 | 04 | The Bill Buddy Application | Deploy the BillBuddy space, feeders, distributed executor and web app | [lab04-BillBuddy_training_example](lab04-BillBuddy_training_example) |
-| 05 | GigaSpaces Ops Manager | Ops Manager UI demo | [lab05-ops_manager](lab05-ops_manager) |
+| 05 | GigaSpaces SpaceDeck | SpaceDeck tour with the ui-demo tool: alerts (CPU, memory, unavailability, no backups), create/remove containers, scale a service | [lab05-spacedeck](lab05-spacedeck) |
 | 06 | GigaSpaces Metrics | InfluxDB, Grafana dashboards (Docker) | [lab06-metrics](lab06-metrics) |
 | 07 | GigaSpaces Manager | Multi-manager cluster (Vagrant), ZooKeeper client example | [lab07-gigaspaces_manager](lab07-gigaspaces_manager) |
 | 08 | Hot Deploy Procedure | Update PU code with the custom REST upgrade plugin | [lab08-hot_deploy](lab08-hot_deploy) |

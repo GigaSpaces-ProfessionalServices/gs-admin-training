@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ui-demo</artifactId>
+        <groupId>com.gigaspaces.dev.training</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>demo-app</artifactId>
+    <packaging>war</packaging>
+
+    <build>
+        <finalName>demo-app</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <!-- These Spring jars are already on the GSC classpath ($GS_HOME/lib/required) -->
+                    <packagingExcludes>WEB-INF/lib/spring-core-*.jar,WEB-INF/lib/spring-beans-*.jar,WEB-INF/lib/spring-context-*.jar,WEB-INF/lib/spring-aop-*.jar,WEB-INF/lib/spring-expression-*.jar,WEB-INF/lib/commons-logging-*.jar,WEB-INF/lib/micrometer-*.jar,WEB-INF/lib/jspecify-*.jar</packagingExcludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <!-- Spring MVC is only in $GS_HOME/lib/optional/spring, so it is packaged into the war -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- Parses the REST Manager (REST v3) JSON responses -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <!-- Admin API (used to run a GC after the memory alert); on the GSC classpath in $GS_HOME/lib/platform/service-grid -->
+        <dependency>
+            <groupId>com.gigaspaces</groupId>
+            <artifactId>xap-admin</artifactId>
+            <version>${gigaspaces.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.gigaspaces.dev.training</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+</project>
