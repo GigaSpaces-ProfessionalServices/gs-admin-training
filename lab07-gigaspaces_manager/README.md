@@ -4,106 +4,93 @@
 
 ## Lab Goals
 
-1. See how easy it is to setup a GigaSpaces cluster.
-2. Get familiar with GS Manager's capabilities.
+1. Get familiar with GS Manager's capabilities.
 
 ## Lab Description
 In this lab we will focus on the GS Manager functionality.  
-To better know its capabilities you will set up 4 machine cluster based on Vagrant.
+To better know its capabilities you will set up a 4 node cluster with Docker Compose: 3 nodes run a GigaSpaces Manager (node1, node2, node3) and 1 node runs without a manager (node4). Each node is a separate container with its own GigaSpaces agent, like a separate machine.
 
-### 1 Setup Vagrant framework on your machine
+**Note:** Docker Compose is used here only as a lab convenience, to simulate several machines on one computer. It is not a recommended way to deploy GigaSpaces. For a containerized or virtualized environment, use Kubernetes (see [lab13-kubernetes](../lab13-kubernetes)).
 
-#### Install VirtualBox
+*An older version of this lab, which uses VirtualBox and Vagrant, is in [Vagrant/README.md](Vagrant/README.md).*
 
-https://www.virtualbox.org/wiki/Downloads
+### 1 Prerequisites
 
-#### Install Vagrant
+* Docker with Docker Compose (`docker compose`): https://docs.docker.com/compose/install/
+* Your local GigaSpaces installation (`$GS_HOME`), to run the CLI. GigaSpaces 18.0 requires Java 25.
+* About 6 GB of disk space for the `gigaspaces/smart-cache-enterprise` image.
 
-https://www.vagrantup.com/downloads.html
+### 2 Start the cluster
 
-### 2 "vagrant up" and provisioning your virtual machine
+1. `cd $GS_ADMIN_TRAINING/lab07-gigaspaces_manager/docker`
+2. `docker compose up -d`  
+   The first run downloads the `gigaspaces/smart-cache-enterprise:18.0.1` image. To use a different version, set `GS_IMAGE_TAG`, for example `GS_IMAGE_TAG=18.0.0 docker compose up -d`.
+3. Wait about 30 seconds until the managers are up. `docker compose ps` should show node1 to node4 running.
 
-1. `cd ~/gs-admin-training/lab07-gigaspaces_manager/Vagrant`
-2. `vagrant up`
-3. Wait until all 4 virtual machines are booted and ready.
+The [docker-compose.yaml](docker/docker-compose.yaml) file sets `GS_MANAGER_SERVERS=node1,node2,node3` on every node, the same setting you put in `setenv-overrides.sh` in earlier labs. The managers on node1 to node3 form the cluster (ZooKeeper quorum, lookup service and GSM), and node4 joins it as a host with one container (GSC).
 
-See in the following screenshot node3 is done (booted and ready) and immediately after node2 has started to boot...  
-![Screenshot](./Pictures/Picture1.png)
+Each manager's REST Manager (port 9090 inside the container) is mapped to a different port on your machine:
 
-**Note:** For more information on "How to Set Up a Local Linux Environment with Vagrant":  
-`https://medium.com/@JohnFoderaro/how-to-set-up-a-local-linux-environment-with-vagrant-163f0ba4da77`
-
+| Node | Runs | From your machine |
+|------|------|-------------------|
+| node1 | GigaSpaces Manager, REST Manager, web UI | http://localhost:9091 (SpaceDeck), ZooKeeper on localhost:2181 |
+| node2 | GigaSpaces Manager, REST Manager | localhost:9092 |
+| node3 | GigaSpaces Manager, REST Manager | localhost:9093 |
+| node4 | 1 container (GSC), no GigaSpaces Manager | localhost:9094 (nothing answers) |
 
 ### 3 Explore the cluster
 
 Please connect to the REST Manager using the cli. You will need to use your local `$GS_HOME` installation. See commands below.   
-It should be available on all manager machines: node1, node2 and node3.  
-On node4 you shouldn't be able to connect to the REST Manager as it is a machine without GigaSpaces Manager.  
+It should be available on all manager nodes: node1, node2 and node3 (ports 9091, 9092 and 9093).  
+On node4 (port 9094) you shouldn't be able to connect to the REST Manager as it is a node without GigaSpaces Manager.  
 *Note: Use the --server option to connect to a specific GigaSpaces Manager node.*  
 ```
-dixson@dixson-pc:~/gigaspaces-smart-cache-enterprise-17.3.0/bin$ ./gs.sh --server=10.211.55.101:8090 host list
+$ cd $GS_HOME/bin
+$ ./gs.sh --server=localhost:9091 host list
 
-HOST NAME    HOST ADDRESS     CONTAINERS COUNT    
-node4        10.211.55.104    0                   
-node2        10.211.55.102    0                   
-node3        10.211.55.103    0                   
-node1        10.211.55.101    0                   
+HOST NAME    HOST ADDRESS    CONTAINERS COUNT    
+node3        172.18.0.3      0                   
+node1        172.18.0.4      0                   
+node4        172.18.0.5      1                   
+node2        172.18.0.2      0                   
 
 
 SUMMARY        
 Hosts:         4    
-Containers:    0    
+Containers:    1    
 
-dixson@dixson-pc:~/gigaspaces-smart-cache-enterprise-17.3.0/bin$ ./gs.sh --server=10.211.55.101:8090 info
+$ ./gs.sh --server=localhost:9091 info
 
 INFO
-Lookups Groups   xap-17.3.0
+Lookups Groups   xap-18.0.1
 Managers         node1,node2,node3
-Revision         17.3.0
-Started On       2025-10-07 18:30:25.514
-Version          17.3.0
+Revision         18.0.1
+Started On       2026-11-06 16:31:15.852
+Version          18.0.1
 
+$ ./gs.sh --server=localhost:9094 host list
+
+Failed to identify cluster type, please make sure the Manager is up and running
 ```
+Run `host list` with `--server=localhost:9092` and `--server=localhost:9093` too: every manager reports the same 4 hosts.
 
 If you see the above, lab has been completed successfully by you :-)
 
-
-**Tip:**  
-To login to the machines goto the Vagrant directory and run:<br>
-    `vagrant ssh node1` (e.g. login to node1)
+**Tips:**
+* To open a shell on a node, run `docker exec -it node1 bash` (e.g. login to node1). GigaSpaces is installed in `/opt/gigaspaces`, and its logs are in `/opt/gigaspaces/logs`.
+* To see a node's console output, run `docker compose logs node1`.
 
 ### 4 Explore Apache ZooKeeper under the hood (optional section if time permits)
 
- * Open `$GS_TRAINING_HOME/lab07-gigaspaces_manager/zk-client-example` project with Intellij (open pom.xml).
+ * Open `$GS_ADMIN_TRAINING/lab07-gigaspaces_manager/zk-client-example` project with Intellij (open pom.xml).
  * Copy the [runConfigurations](zk-client-example/runConfigurations) directory to .idea folder. Restart Intellij.
  * The project has a simple Java program that can traverse the Zookeeper nodes and print its data.
- * Run the zk-client-example run configuration from Intellij.
- * Explore GS ZK tree to better understand GigaSpaces and the information stored in ZK.
+ * Run the zk-client-example run configuration from Intellij. It connects to node1's ZooKeeper at `localhost:2181`.
+ * Explore GS ZK tree to better understand GigaSpaces and the information stored in ZK. For example, `/zookeeper/config` lists the 3 ZooKeeper servers (node1, node2, node3), and `/xap/managers/gsm/leader-election/participants` has one entry per manager.
 
-### 5 Note:
+### 5 Stop the cluster
 
- * If you see the following error:
-
-The IP address configured for the host-only network is not within the
-allowed ranges. Please update the address used to be within the allowed
-ranges and run the command again.
-
-Continue with the recommendations mentioned.
-
-Edit `/etc/vbox/networks.conf`, add the following:
 ```
-      * 10.0.0.0/8 192.168.0.0/16
-      * 2001::/64
+cd $GS_ADMIN_TRAINING/lab07-gigaspaces_manager/docker
+docker compose down
 ```
- * To determine the ip address to access the ui:
-```
-vagrant ssh node1
-ip address show
-```
-For example:
-| Node | IP Address |
-|------|------------|
-| Node1 | http://10.211.55.101:8090/ |
-| Node2 | http://10.211.55.102:8090/ |
-| Node3 | http://10.211.55.103:8090/ |
-| Node4 | 10.211.55.104 (No web-ui or GigaSpaces Manager running)|     

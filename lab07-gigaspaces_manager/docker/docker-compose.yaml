@@ -1,0 +1,67 @@
+# GigaSpaces cluster for lab07: 3 managers (node1-node3) and 1 host without a manager (node4).
+# Each node runs its own GigaSpaces agent (GSA), like a separate machine.
+#
+# For lab purposes only: Docker Compose is used here to simulate several machines on one
+# computer. It is not a recommended way to deploy GigaSpaces. For a containerized or
+# virtualized environment, use Kubernetes (see lab13-kubernetes).
+#
+# Image tag: defaults to 18.0.1. To use another tag, for example:
+#   GS_IMAGE_TAG=18.0.0 docker compose up -d
+
+x-gs-node: &gs-node
+  image: gigaspaces/smart-cache-enterprise:${GS_IMAGE_TAG:-18.0.1}
+  networks:
+    - gs-network
+
+x-gs-env: &gs-env
+  GS_MANAGER_SERVERS: node1,node2,node3
+  GS_LICENSE: tryme
+  GS_OPTIONS_EXT: -Xms512m -Xmx512m
+
+services:
+  node1:
+    <<: *gs-node
+    container_name: node1
+    hostname: node1
+    command: host run-agent --manager --webui --restv3
+    environment: *gs-env
+    ports:
+      - "9091:9090"   # REST Manager (REST v3) and web UI
+      - "2181:2181"   # ZooKeeper, for the zk-client-example
+
+  node2:
+    <<: *gs-node
+    container_name: node2
+    hostname: node2
+    command: host run-agent --manager --restv3
+    environment: *gs-env
+    ports:
+      - "9092:9090"   # REST Manager (REST v3)
+
+  node3:
+    <<: *gs-node
+    container_name: node3
+    hostname: node3
+    command: host run-agent --manager --restv3
+    environment: *gs-env
+    ports:
+      - "9093:9090"   # REST Manager (REST v3)
+
+  node4:
+    <<: *gs-node
+    container_name: node4
+    hostname: node4
+    command: host run-agent --gsc=1
+    environment:
+      <<: *gs-env
+      GS_GSC_OPTIONS: -Xms512m -Xmx512m
+    ports:
+      - "9094:9090"   # nothing listens here: node4 has no GigaSpaces Manager
+    depends_on:
+      - node1
+      - node2
+      - node3
+
+networks:
+  gs-network:
+    driver: bridge
