@@ -13,7 +13,7 @@ For more information please see our [course syllabus](https://docs.google.com/sp
 | 04 | The Bill Buddy Application | Deploy the BillBuddy space, feeders, distributed executor and web app | [lab04-BillBuddy_training_example](lab04-BillBuddy_training_example) |
 | 05 | GigaSpaces SpaceDeck | SpaceDeck tour with the ui-demo tool: alerts (CPU, memory, unavailability, no backups), create/remove containers, scale a service | [lab05-spacedeck](lab05-spacedeck) |
 | 06 | GigaSpaces Metrics | InfluxDB, Grafana dashboards (Docker) | [lab06-metrics](lab06-metrics) |
-| 07 | GigaSpaces Manager | Multi-manager cluster (Vagrant), ZooKeeper client example | [lab07-gigaspaces_manager](lab07-gigaspaces_manager) |
+| 07 | GigaSpaces Manager | Multi-manager cluster (Docker Compose; older Vagrant version kept), ZooKeeper client example | [lab07-gigaspaces_manager](lab07-gigaspaces_manager) |
 | 08 | Hot Deploy Procedure | Update PU code with the custom REST upgrade plugin | [lab08-hot_deploy](lab08-hot_deploy) |
 | 09 | GigaSpaces Command Line Interface | `gs.sh` CLI | [lab09-cli](lab09-cli) |
 | 10 | GigaSpaces Java Admin API | Admin API alerts, RelocatePUI example | [lab10-java_admin_api](lab10-java_admin_api) |
