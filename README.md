@@ -15,8 +15,8 @@ For more information please see our [course syllabus](https://docs.google.com/sp
 | 06 | GigaSpaces Metrics | InfluxDB, Grafana dashboards (Docker) | [lab06-metrics](lab06-metrics) |
 | 07 | GigaSpaces Manager | Multi-manager cluster (Docker Compose; older Vagrant version kept), ZooKeeper client example | [lab07-gigaspaces_manager](lab07-gigaspaces_manager) |
 | 08 | Hot Deploy Procedure | Update PU code with the custom REST upgrade plugin | [lab08-hot_deploy](lab08-hot_deploy) |
-| 09 | GigaSpaces Command Line Interface | `gs.sh` CLI | [lab09-cli](lab09-cli) |
-| 10 | GigaSpaces Java Admin API | Admin API alerts, RelocatePUI example | [lab10-java_admin_api](lab10-java_admin_api) |
+| 09 | Zone-Based Deployment with the CLI | Zoned GSCs, `pu deploy --zones`, verify via `gs.sh` and REST v3 | [lab09-zone_deployment](lab09-zone_deployment) |
+| 10 | GigaSpaces REST Manager API | Why REST v3, SpaceDeck on the same API, curl + jq: create GSCs, deploy, load data, relocate, alerts, then automate the build with one script | [lab10-rest_manager_api](lab10-rest_manager_api) |
 | 11 | Grid Security | Secured grid, password encryption, roles, secured space | [lab11-security](lab11-security) |
 | 12 | MemoryXtend | BillBuddy with RocksDB blobstore, restore from disk | [lab12-memoryxtend](lab12-memoryxtend) |
 | 13 | Kubernetes | minikube, Helm charts, operator, vertical scaling | [lab13-kubernetes](lab13-kubernetes) |
