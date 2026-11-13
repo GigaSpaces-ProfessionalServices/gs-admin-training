@@ -34,7 +34,14 @@ You will write each Space Object separately to the space and use Memory Analyzer
    This will also use a chunk of storage to store individual properties to further increase storage optimization. But the manner it which the chunk storage is accessed differs from the Direct Storage Optimization.
 
 ###### 3. Start the Grid
-`./gs.sh host run-agent --manager --gsc=1`
+Make sure `GS_MANAGER_SERVERS` is set in `$GS_HOME/bin/setenv-overrides.sh`:
+```
+export GS_MANAGER_SERVERS="localhost"
+```
+Then, from `$GS_HOME/bin`:
+```
+./gs.sh host run-agent --manager --webui --restv3 --gsc=1
+```
     
 ###### 4. Deploy "demo" space with 1 partition (no backup)
 `./gs.sh space deploy demo`
@@ -43,7 +50,8 @@ You will write each Space Object separately to the space and use Memory Analyzer
 
  * Fill the first type with data.
  * Write 10K instances to the space. For your convenience a JUnit application configuration has been created.
-    * Open the `$GS_ADMIN_TRAINING/lab14-storage_optimization` project in Intellij (open the pom.xml).
+    * Open the `$GS_ADMIN_TRAINING/lab14-storage_optimization` project in Intellij (open the pom.xml).  
+      Note: GigaSpaces 18.0 requires Java 25. Set the IntelliJ project SDK to a JDK 25.
     * Copy runConfigurations to the Intellij .idea directory.
       ```
       cp -r runConfigurations .idea/
@@ -51,10 +59,24 @@ You will write each Space Object separately to the space and use Memory Analyzer
     * Restart Intellij
     * Run the SpaceTestCase run configuration. You can modify the `-Dtest.case` System Property. This System Property controls which type to write.  
       The values can be `NONE, BINARY_COMPRESSED_PROPS, DIRECT, SEQUENTIAL`. 
- * Open the Ops Manager and verify that you see the entries. 
+ * Verify that you see the entries, in SpaceDeck ('Management' | 'Spaces', click `demo`) or with the CLI:
+   ```
+   $ ./gs.sh space info --type-stats demo
+   ...
+   TYPES    
+    DATA TYPE NAME                                         OBJECTS COUNT    TEMPLATES COUNT    
+    com.gigaspaces.dev.training.MyBigObjectNoStorageOpt    10,000           0                  
+    java.lang.Object                                       0                0                  
+   ```
 
 ###### 6. Take a heap dump
- * Open the Ops Manager and take the heap dump of the space.
+ * Download a heap dump of the GSC that hosts the space with the REST Manager API (REST v3). Find the container of `demo~1`, then download its heap dump:
+   ```
+   id=$(curl -s http://localhost:9090/api/v3/containers | jq -r '.[] | select(.instances | index("demo~1")) | .id')
+   curl -s -o heap_NONE.zip http://localhost:9090/api/v3/containers/$id/downloadHeapDump
+   unzip heap_NONE.zip -d heap_NONE
+   ```
+   The zip holds the heap dump (`gsc-<host>-pid-<pid>/heap.hprof`) and an `overview.txt`.
  * Alternatively, from the command line run, `jmap -dump:live,format=b,file=/path/to/dump/heap_<storage type>-<pid>.hprof <pid>`
  * Un-deploy "demo" space: `./gs.sh pu undeploy demo`
 
@@ -94,6 +116,8 @@ select * from com.gigaspaces.internal.server.storage.HybridEntryData where toStr
 
 ##### MyBigObjectPropertyStorageOpt - Footprint per Object 928 byte | Total Heap size (= 34.5)
 
+Some objects show 920 bytes: the compressed properties vary slightly in size.
+
 ![Screenshot](Pictures/Picture2.png)
 <br/>
 <br/>
@@ -121,6 +145,8 @@ select * from com.gigaspaces.internal.server.storage.HybridEntryData where toStr
 <br/>  
 
 ##### Table Summary #####
+
+The footprint per object should match exactly. The total heap depends on everything else in the GSC, so expect yours to differ by several MB.
 
 | | Footprint per Object (bytes) | Total RAM (MB) |
 |---|---|---|

@@ -27,7 +27,7 @@ Before beginning to work with the data grid and xap, ensure that you have the fo
 1. Configure memory and cpu:
 
 ```
-    minikube config set memory 4096
+    minikube config set memory 8192
     minikube config set cpus 4
 ```
     
@@ -68,6 +68,8 @@ Before beginning to work with the data grid and xap, ensure that you have the fo
 
 ---
 ### Build
+Note: GigaSpaces 18.0 requires Java 25. Set `JAVA_HOME` for Maven to a JDK 25.
+
 1. Confirm the `$DOCKER_USER_NAME` is set correctly in the [settings.sh](scripts/settings.sh) file
 2. Run the [build.sh](scripts/build.sh) script which will run maven to install the project and call the [script with the docker build commands](scripts/docker-build.sh).
 
@@ -83,19 +85,19 @@ Deployment steps are defined in the [deploy-k8s.sh script](scripts/deploy-k8s/de
 
    Note: This step is _optional_. The charts are unpacked in your current directory and can be useful for troubleshooting.
     ```
-    helm pull gigaspaces/smart-cache --version 17.3.0 --untar
-    helm pull gigaspaces/xap-pu      --version 17.3.0 --untar
+    helm pull gigaspaces/smart-cache --version 18.0.0 --untar
+    helm pull gigaspaces/xap-pu      --version 18.0.0 --untar
     ```
 
 #### helm manager and operator deployment
 1. Deploy a **xap-manager** pod called manager:  
 ```
-helm install manager gigaspaces/xap-manager --version 17.3.0 --set global.security.enabled=false,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
+helm install manager gigaspaces/xap-manager --version 18.0.0 --set global.security.enabled=false,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
 ```
 2. Deploy the **xap-operator** and name it operator.  
    The xap-operator is responsible for deployment of PUs and managing the **pu** Custom Resource Definition:  
 ```
-helm install operator gigaspaces/xap-operator --version 17.3.0 --set global.security.enabled=false
+helm install operator gigaspaces/xap-operator --version 18.0.0 --set global.security.enabled=false
 ```
 
 #### View and monitor kubernetes deployment
@@ -113,21 +115,30 @@ xap-operator-674d8dcf65-vsk27   1/1     Running   0          5m
 
 ![Screenshot](./Pictures/Picture1.png)
 
-3. Open Gigaspaces Ops Manager  
-   On minikube this is can be done by exposing a NodePort service:  
+3. Open GigaSpaces SpaceDeck  
+   On minikube this can be done by exposing the manager's port 9090 (SpaceDeck and the REST Manager API) with a NodePort service:  
    `kubectl apply -f manager-np.yaml`  
    Note: The manager-np.yaml can be found [here](scripts/deploy-k8s/yaml/manager-np.yaml).  
-   Then to automatically open a browser window to the Ops Manager:  
+   Then to automatically open a browser window to SpaceDeck:  
    `minikube service manager-np`
 
-![Screenshot](./Pictures/Picture2.png)
+   The same port serves the REST Manager API (REST v3). Check that the manager answers:
+```
+$ curl -s $(minikube service --url manager-np)/api/v3/info | jq '{revision, managers}'
+{
+  "revision": "18.0.0",
+  "managers": [
+    "xap-manager-0.xap-manager-hs.default.svc.cluster.local"
+  ]
+}
+```
 
 ---
 ### Processor Service deployment
 #### Deploy the processor docker image
 1. Deploy the processor using helm. See [deploy-k8s.sh script](scripts/deploy-k8s/deploy-k8s.sh):
 ```
-helm install processor gigaspaces/xap-pu --version 17.3.0 --set schema=partitioned,partitions=1,ha=false,resourceUrl=pu.jar,image.repository=$DOCKER_USERNAME/processor,image.tag=1.0-SNAPSHOT,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
+helm install processor gigaspaces/xap-pu --version 18.0.0 --set schema=partitioned,partitions=1,ha=false,resourceUrl=pu.jar,image.repository=$DOCKER_USERNAME/processor,image.tag=1.0-SNAPSHOT,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
 ```
 ```
 $ kubectl get pod
@@ -160,11 +171,11 @@ $GS_HOME/bin/gs.sh --server 192.168.49.2:31382 pu upload processor/target/data-p
    **The result should be:**
 ```
    [data-processor.jar] successfully uploaded  
-   Resource URL: http://192.168.49.2:31382/v2/resources/data-processor.jar  
+   Resource URL: http://192.168.49.2:31382/api/v3/resources/data-processor.jar  
 ```
 4. Deploy the processor using helm
 ```
-helm install processor gigaspaces/xap-pu --version 17.3.0 --set schema=partitioned,partitions=1,ha=false,resourceUrl=http://xap-manager-service:8090/v2/resources/data-processor.jar,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
+helm install processor gigaspaces/xap-pu --version 18.0.0 --set schema=partitioned,partitions=1,ha=false,resourceUrl=http://xap-manager-service:9090/api/v3/resources/data-processor.jar,java.options="-Dcom.gs.hsqldb.all-metrics-recording.enabled=false"
 ```
 ---
 ### Deploy the feeder
@@ -192,21 +203,43 @@ pod/xap-operator-674d8dcf65-vsk27   1/1     Running   0          30m
 
 1. minikube dashboard
 
-![Screenshot](./Pictures/Picture2.png)
+Use the dashboard you opened earlier (`minikube dashboard`) to see the processor's StatefulSet and Pod and the feeder Job.
 
-2. GS Ops Manager
+2. GS SpaceDeck
 
-Click on "Monitor my services".  
+Open 'Management' | 'Processing Units' to see the processor, 'Management' | 'Spaces' and click `demo` to see the space, and 'Data Query' to query the data.
 
-![Screenshot](./Pictures/Picture4.png)
+3. GS CLI
 
-Click on "Space: demo" (button in the top right corner).  
+The same information is available from the GS CLI (see "Alternative steps" above for the `--server` value).
 
-![Screenshot](./Pictures/Picture5.png)
+List the processing units:
+```
+$ $GS_HOME/bin/gs.sh --server 192.168.49.2:31382 pu list
 
-Query the data:  
+NAME         TYPE        SPACE    TOPOLOGY           STATUS      RESOURCE    QUIESCED    INSTANCES COUNT    
+processor    STATEFUL    demo     partitioned 1,0    DEPLOYED                false       1                  
+```
 
-![Screenshot](./Pictures/Picture6.png)
+Count the objects in the space. The count goes up by one every second while the feeder runs:
+```
+$ $GS_HOME/bin/gs.sh --server 192.168.49.2:31382 space info --type-stats demo
+...
+TYPES    
+ DATA TYPE NAME                             OBJECTS COUNT    TEMPLATES COUNT    
+ java.lang.Object                           0                0                  
+ com.gigaspaces.dev.training.common.Data    402              1                  
+```
+
+Query the data. The processor sets `processed` to `true`:
+```
+$ $GS_HOME/bin/gs.sh --server 192.168.49.2:31382 space query --max-results=3 --columns=id --columns=processed --columns=data demo com.gigaspaces.dev.training.common.Data
+
+id    processed    data                                
+12    true         PROCESSED : FEEDER 1794521902039    
+50    true         PROCESSED : FEEDER 1794521940039    
+7     true         PROCESSED : FEEDER 1794521897039    
+```
 
 ### Troubleshooting
 1. If the processor service did not get deployed properly, a good place to check for errors is in the operator Pod logs. For example,
@@ -225,11 +258,13 @@ kubectl logs xap-operator-674d8dcf65-vsk27
 
 ### Perform memory scaling using Kubernetes tools
 
-1. Review current RAM occupied by the processor service.
+1. Review the current memory of the processor service.
 
-   Click on the processor service  
-
-   ![Screenshot](./Pictures/Picture7.png)
+   In SpaceDeck, open 'Management' | 'Processing Units' and click `processor`. Or check the pod's memory limit with kubectl:
+```
+$ kubectl get pod processor-xap-pu-0 -o jsonpath='{.spec.containers[0].resources}'
+{"limits":{"memory":"4Gi"}}
+```
 
 2. Edit the current processor service's memory configuration using the minikube dashboard. Click on the processor service's StatefulSet, click on the edit (pencil icon) in the top right corner:<br/>
 
@@ -244,9 +279,11 @@ kubectl logs xap-operator-674d8dcf65-vsk27
    Or you can use `kubectl edit statefulset/processor-xap-pu`.  
    After you have finished the edits, the pods will restart with new memory settings.
 
-3. Check the processor service to see the memory has been increased.:  
-
-   ![Screenshot](./Pictures/Picture9.png)
+3. Check the processor service to see the memory has been increased (in SpaceDeck, or with the same kubectl command, which now shows `5Gi`):
+```
+$ kubectl get pod processor-xap-pu-0 -o jsonpath='{.spec.containers[0].resources}'
+{"limits":{"memory":"5Gi"}}
+```
 
 ### Perform memory scale using the GS CLI
 

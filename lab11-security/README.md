@@ -17,17 +17,19 @@ This lab will have tasks related to security, which include:
 2. Edit setenv-overrides.sh and add:
 
 ```
-export GS_MANAGER_OPTIONS="-Dcom.gs.manager.rest.ssl.enabled=false"
 export GS_OPTIONS_EXT="-Dcom.gs.security.enabled=true"
 ```
-Note: Make sure you have set `GS_MANAGER_SERVERS` to localhost also.
+Note: Make sure you have set `GS_MANAGER_SERVERS` to localhost also:
+```
+export GS_MANAGER_SERVERS="localhost"
+```
 
 ### 2. User password encryption
 #### Overview of steps:
  * Edit the security-config.xml file.
  * Use org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.
  * Encrypt and write the passwords for "gs-admin", "gs-mngr" and "gs-viewer". 
- * Verify that you can login through the Ops Manager.
+ * Verify that you can log in to SpaceDeck and the REST Manager API.
 
 
 ##### Edit the security-config.xml as follows
@@ -48,6 +50,7 @@ Note: Make sure you have set `GS_MANAGER_SERVERS` to localhost also.
     </bean>
  ```
 3. Generating passwords  
+    * Note: GigaSpaces 18.0 requires Java 25. Set the IntelliJ project SDK (and `JAVA_HOME` for Maven) to a JDK 25.
     * Copy the runConfigurations directory to the .idea directory. Restart Intellij.
     * Open this project in Intellij (pom.xml is located at `$GS_ADMIN_TRAINING/lab11-security/pom.xml`).
     * Run the PasswordEncoderGenerator to generate the password. Pass the password that you want encoded as a program argument. 
@@ -59,6 +62,8 @@ Note: Make sure you have set `GS_MANAGER_SERVERS` to localhost also.
     * These are the privileges available on the service grid.
 
       ![Classic Roles and Privileges](Pictures/Picture1.png)
+
+      _Legacy: gs-ui. The privileges are the same in GigaSpaces 18.0._
     * MANAGE_GRID - privileges associated with managing the life cycle of a service grid component.
     * MONITOR_JVM - allows for monitoring of the JVM and the ability to take heap dumps.
     * MONITOR_PU, PROVISION_PU, MANAGE_PU - privileges related to managing the life cycle of a PU.
@@ -68,18 +73,24 @@ Note: Make sure you have set `GS_MANAGER_SERVERS` to localhost also.
     
 ### 3. Start the grid with a manager
 ```
-./gs.sh host run-agent --manager
+./gs.sh host run-agent --manager --webui --restv3
 ```
 ### 4. Verify logins
         
-1. Open the Ops-Manager. The Ops-Manager will be deployed at: `localhost:8090`
-
-2. Verify you can login with:         
+1. Open SpaceDeck at `http://localhost:9090/` and verify you can log in with:
 ```
     gs-viewer/gs-viewer
     gs-mngr/gs-mngr
     gs-admin/gs-admin
 ```
+
+2. Verify the same users with the REST Manager API (REST v3), which uses HTTP basic authentication:
+```
+curl -s -o /dev/null -w '%{http_code}\n' -u gs-viewer:gs-viewer http://localhost:9090/api/v3/containers
+curl -s -o /dev/null -w '%{http_code}\n' -u gs-admin:wrong http://localhost:9090/api/v3/containers
+curl -s -o /dev/null -w '%{http_code}\n' http://localhost:9090/api/v3/containers
+```
+The first call returns `200`. A wrong password or no credentials returns `401`.
 ### 5. Writing to a Secured Space
 #### Overview of steps:
 Writing to a secured PU will be composed of:
@@ -96,7 +107,8 @@ Writing to a secured PU will be composed of:
 
 2. Restart the grid with a manager
 ```
-./gs.sh host run-agent --manager
+./gs.sh host kill-agent
+./gs.sh host run-agent --manager --webui --restv3
 ```
 
 3. Start 2 Grid Service Containers

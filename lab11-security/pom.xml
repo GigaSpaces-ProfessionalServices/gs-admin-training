@@ -15,11 +15,11 @@
         </repository>
     </repositories>
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gigaspaces.version>17.3.0</gigaspaces.version>
-        <spring.security.version>7.1.0</spring.security.version>
+        <gigaspaces.version>18.0.1</gigaspaces.version>
+        <spring.security.version>7.1.1</spring.security.version>
     </properties>
     <modules>
         <module>securedgridconfig</module>
