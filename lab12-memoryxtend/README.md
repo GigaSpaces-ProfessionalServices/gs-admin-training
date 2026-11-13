@@ -18,14 +18,21 @@ You will understand MemoryXtend and its benefits by deploying a GigaSpaces appli
 
  1. Navigate to `$GS_HOME/bin`
         
- 2. Start **GigaSpaces agent** with a local Manager server and 5 GSCs:
+ 2. Make sure `GS_MANAGER_SERVERS` is set in `setenv-overrides.sh`:
     ```
-    ./gs.sh host run-agent --auto --gsc=5
+    export GS_MANAGER_SERVERS="localhost"
+    ```
+
+ 3. Start **GigaSpaces agent** with a local Manager server, the web UI, REST v3 and 5 GSCs:
+    ```
+    ./gs.sh host run-agent --manager --webui --restv3 --gsc=5
     ```
     
 #### Deploy BillBuddy_Space
     
 1. Open `$GS_ADMIN_TRAINING_HOME/lab12-memoryxtend` project with Intellij (open the pom.xml).
+
+    Note: GigaSpaces 18.0 requires Java 25. Set the IntelliJ project SDK (and `JAVA_HOME` for Maven) to a JDK 25.
 2. Run mvn package
     ```
         ~/gs-admin-training/lab12-memoryxtend$ mvn package
@@ -46,7 +53,7 @@ You will understand MemoryXtend and its benefits by deploying a GigaSpaces appli
 
     ###### Add GS_LOOKUP_GROUPS & GS_LOOKUP_LOCATORS
 
-    For example set `GS_LOOKUP_LOCATORS=localhost` and `GS_LOOKUP_GROUPS=xap-17.3.0`
+    For example set `GS_LOOKUP_LOCATORS=localhost` and `GS_LOOKUP_GROUPS=xap-18.0.1`
 
 4. Copy the runConfigurations directory to the Intellij **.idea** directory to enable the Java Application configurations. Restart Intellij.
 
@@ -72,11 +79,12 @@ You will understand MemoryXtend and its benefits by deploying a GigaSpaces appli
     TYPES    
      DATA TYPE NAME                          OBJECTS COUNT    TEMPLATES COUNT    
      com.gs.billbuddy.model.Merchant         16               0                  
+     com.gs.billbuddy.model.Payment          0                0                  
      com.gs.billbuddy.model.User             20               0                  
      com.gs.billbuddy.model.Contract         16               0                  
      java.lang.Object                        0                0                  
     ```
-    Please refer to 'lab03-application_components' for other ways to check data types (Ops Manager, REST).
+    Please refer to 'lab03-application_components' for other ways to check data types (SpaceDeck, REST).
 
 
 3. Query the list of Users with the gs CLI:
@@ -92,9 +100,9 @@ You will understand MemoryXtend and its benefits by deploying a GigaSpaces appli
     Results:    20    
     ```
     * Without `--max-results` the CLI returns at most 10 rows.
-    * Use `--columns` to select columns and `--filter` to add a WHERE predicate:
+    * Use `--columns` to select columns (repeat it once per column) and `--filter` to add a WHERE predicate:
     ```
-    $ ./gs.sh space query --columns=userAccountId,name,balance --filter="userAccountId<5" BillBuddySpace com.gs.billbuddy.model.User
+    $ ./gs.sh space query --columns=userAccountId --columns=name --columns=balance --filter="userAccountId<5" BillBuddySpace com.gs.billbuddy.model.User
 
     userAccountId    name                balance                
     1                James Johnson       -431.96000000000004    
@@ -107,6 +115,7 @@ You will understand MemoryXtend and its benefits by deploying a GigaSpaces appli
     ```
 
     ###### Note: Fully qualified class name is required.
+    ###### Note: Repeat `--columns` for each column. A comma-separated list (`--columns=userAccountId,name,balance`) is treated as one unknown column and the query returns no rows.
     ###### Note: Do not put spaces inside the `--filter` value (`"userAccountId<5"`, not `"userAccountId < 5"`). gs.sh passes its arguments on unquoted, so a space splits the filter and the command fails with `Unmatched arguments`.
     ###### Note: `rownum` is not supported by the CLI filter (`Column 'rownum' not found in any table`); use `--max-results` instead.
 
@@ -128,7 +137,7 @@ You will understand MemoryXtend and its benefits by deploying a GigaSpaces appli
    Each Payment is also processed by the space, which writes a matching `com.gs.billbuddy.model.ProcessingFee`.
    To look at some payments:
     ```
-    $ ./gs.sh space query --max-results=5 --columns=paymentAmount,description,status --filter="paymentAmount>90" BillBuddySpace com.gs.billbuddy.model.Payment
+    $ ./gs.sh space query --max-results=5 --columns=paymentAmount --columns=description --columns=status --filter="paymentAmount>90" BillBuddySpace com.gs.billbuddy.model.Payment
 
     paymentAmount    description    status       
     97.83            GARDEN         PROCESSED    
@@ -165,6 +174,8 @@ The counts should match the counts you saw before undeploying:
 ```
 
 ![Screenshot](./Pictures/Picture5.png)
+
+_Legacy: Ops Manager. In GigaSpaces 18.0, use the `gs.sh` output above, or SpaceDeck ('Management' | 'Spaces')._
 
 ### Additional resources
 

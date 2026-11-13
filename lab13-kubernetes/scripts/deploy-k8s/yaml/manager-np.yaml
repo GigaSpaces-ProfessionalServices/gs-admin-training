@@ -7,6 +7,6 @@ spec:
     selectorId: xap-manager
   ports:
     - protocol: TCP
-      port: 8090
-      targetPort: 8090
+      port: 9090
+      targetPort: 9090
   type: NodePort
